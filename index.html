@@ -50,6 +50,34 @@ input{font-family:inherit}
                border-radius:50%;animation:spin 1s linear infinite;margin-top:26px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ============================================================
+   ANTICLOCKWISE LOADING SPINNER (for auth buttons)
+   ============================================================ */
+@keyframes spinCCW{to{transform:rotate(-360deg)}}
+.btn-spinner{
+  display:inline-block;
+  width:20px;height:20px;
+  border:2.5px solid rgba(255,255,255,.35);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spinCCW .65s linear infinite;
+  vertical-align:middle;
+}
+.btn-spinner.dark{
+  border-color:rgba(3,81,145,.22);
+  border-top-color:#035191;
+}
+#authBtn .btn-spinner,
+#googleBtn .btn-spinner{
+  margin-right:8px;
+}
+#authBtn.loading,
+#googleBtn.loading{
+  pointer-events:none;
+  opacity:.92;
+}
+/* ============================================================ */
+
 #homePage{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:500;overflow:hidden;
           padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 .home-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:84px;overflow-x:hidden}
@@ -155,7 +183,8 @@ input{font-family:inherit}
 .home-empty{grid-column:1/-1;text-align:center;padding:40px 20px;color:#888;font-size:14px}
 
 /* ============================================================
-   UPDATED BOTTOM NAVIGATION — Professional Blue + Tap Effect
+   BOTTOM NAVIGATION — Modern realistic SVG icons
+   (Dark gray stops for optimum visibility on white nav bar)
    ============================================================ */
 .home-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card-bg);border-top:1px solid var(--line);
           display:flex;justify-content:space-around;padding:6px 4px calc(6px + var(--safe-bottom));z-index:60;
@@ -172,9 +201,19 @@ input{font-family:inherit}
   background-color: rgba(37, 99, 235, 0.1);
   transform: scale(0.94);
 }
-.home-nav-item .nav-icon{font-size:18px; transition: transform 0.2s ease;}
+.home-nav-item .nav-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:22px;height:22px;
+  transition: transform 0.2s ease;
+}
+.home-nav-item .nav-icon svg{display:block;width:22px;height:22px;}
+/* Optimum dark gray for inactive icons */
+.home-nav-item .nav-icon svg .np-s1{stop-color:#6b7280;transition:stop-color .2s ease}
+.home-nav-item .nav-icon svg .np-s2{stop-color:#4b5563;transition:stop-color .2s ease}
 .home-nav-item.active{color: var(--nav-active-blue); font-weight: 700;}
 .home-nav-item.active .nav-icon{transform: translateY(-1px);}
+.home-nav-item.active .nav-icon svg .np-s1{stop-color:#2563eb}
+.home-nav-item.active .nav-icon svg .np-s2{stop-color:#1d4ed8}
 .home-nav-item .nav-badge{position:absolute;top:2px;right:24%;background:#ff3b30;color:#fff;font-size:9px;
                           font-weight:700;min-width:16px;height:16px;padding:0 4px;border-radius:8px;
                           display:flex;align-items:center;justify-content:center;border:2px solid #fff}
@@ -200,7 +239,8 @@ input{font-family:inherit}
 .login-box #authBtn{width: 100%;padding: 16px;margin-top: 10px;
     background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-2));
     border: none;border-radius: 14px;color: #fff;font-weight: 600;font-size: 16px;
-    transition: transform 0.2s, box-shadow 0.2s;}
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;}
 .login-box #authBtn:hover{transform: translateY(-2px);box-shadow: 0 8px 20px rgba(3,81,145,0.25);}
 .login-box #authBtn:active{transform: translateY(0);}
 .login-box .switch{margin-top: 16px;font-size: 14px;color: #64748b;cursor: pointer;font-weight: 500;transition: color 0.2s;}
@@ -545,7 +585,10 @@ input{font-family:inherit}
             </svg>
             <span class="home-cart-badge" id="homeVideoBadge" style="display:none">0</span>
           </button>
-          <button class="home-icon-btn" id="homeWishBtn"><i class="fas fa-heart"></i></button>
+          <button class="home-icon-btn" id="homeWishBtn">
+            <i class="fas fa-heart"></i>
+            <span class="home-cart-badge" id="homeWishBadge" style="display:none">0</span>
+          </button>
           <button class="home-icon-btn" id="homeCartBtn">
             <i class="fas fa-shopping-cart"></i>
             <span class="home-cart-badge" id="homeCartBadge" style="display:none">0</span>
@@ -590,13 +633,97 @@ input{font-family:inherit}
   </div>
 
   <nav class="home-nav">
-    <button class="home-nav-item" data-nav="home"><span class="nav-icon"><i class="fas fa-home"></i></span><span>Home</span></button>
-    <button class="home-nav-item" data-nav="categories"><span class="nav-icon"><i class="fas fa-th-large"></i></span><span>Categories</span></button>
-    <button class="home-nav-item" data-nav="chat"><span class="nav-icon"><i class="fas fa-comment-dots"></i></span><span>AI Chat</span>
-      <span class="nav-badge" id="navChatBadge" style="display:none">0</span></button>
-    <button class="home-nav-item" data-nav="cart"><span class="nav-icon"><i class="fas fa-shopping-bag"></i></span><span>Cart</span>
-      <span class="nav-badge" id="navCartBadge" style="display:none">0</span></button>
-    <button class="home-nav-item" data-nav="account"><span class="nav-icon"><i class="fas fa-user"></i></span><span>My Nypadrox</span></button>
+    <button class="home-nav-item" data-nav="home">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="npGradHome" gradientUnits="userSpaceOnUse" x1="12" y1="3" x2="12" y2="22">
+              <stop class="np-s1" offset="0"/>
+              <stop class="np-s2" offset="1"/>
+            </linearGradient>
+          </defs>
+          <path d="M12 3 3 10.5V20a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 20v-9.5L12 3Z" fill="url(#npGradHome)"/>
+          <path d="M9.5 21.5V16a2.5 2.5 0 0 1 5 0v5.5" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>Home</span>
+    </button>
+
+    <button class="home-nav-item" data-nav="categories">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="npGradCat" gradientUnits="userSpaceOnUse" x1="12" y1="3" x2="12" y2="21">
+              <stop class="np-s1" offset="0"/>
+              <stop class="np-s2" offset="1"/>
+            </linearGradient>
+          </defs>
+          <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2.4" fill="url(#npGradCat)"/>
+          <rect x="13" y="3.5" width="7.5" height="7.5" rx="2.4" fill="url(#npGradCat)" opacity=".45"/>
+          <rect x="3.5" y="13" width="7.5" height="7.5" rx="2.4" fill="url(#npGradCat)" opacity=".45"/>
+          <rect x="13" y="13" width="7.5" height="7.5" rx="2.4" fill="url(#npGradCat)"/>
+        </svg>
+      </span>
+      <span>Categories</span>
+    </button>
+
+    <button class="home-nav-item" data-nav="chat">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="npGradChat" gradientUnits="userSpaceOnUse" x1="12" y1="3" x2="12" y2="18">
+              <stop class="np-s1" offset="0"/>
+              <stop class="np-s2" offset="1"/>
+            </linearGradient>
+          </defs>
+          <path d="M12 3.5c-4.8 0-8.7 3.2-8.7 7.2 0 2.2 1.2 4.2 3 5.5l-.6 3.3c-.1.5.5.9 1 .6l3.4-2c.6.1 1.3.1 1.9.1 4.8 0 8.7-3.2 8.7-7.2S16.8 3.5 12 3.5Z" fill="url(#npGradChat)"/>
+          <path d="M12 6.5l1.05 2.7 2.7 1.05-2.7 1.05L12 14l-1.05-2.7-2.7-1.05 2.7-1.05L12 6.5Z" fill="#fff"/>
+        </svg>
+      </span>
+      <span>AI Chat</span>
+      <span class="nav-badge" id="navChatBadge" style="display:none">0</span>
+    </button>
+
+    <button class="home-nav-item" data-nav="cart">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="npGradCart" gradientUnits="userSpaceOnUse" x1="12" y1="3" x2="12" y2="21">
+              <stop class="np-s1" offset="0"/>
+              <stop class="np-s2" offset="1"/>
+            </linearGradient>
+          </defs>
+          <path d="M3 4h2l1.5 4" fill="none" stroke="url(#npGradCart)" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6.5 10h11l1.5 6H5l1.5-6z" fill="url(#npGradCart)"/>
+          <circle cx="9" cy="19" r="1.8" fill="url(#npGradCart)"/>
+          <circle cx="15" cy="19" r="1.8" fill="url(#npGradCart)"/>
+          <path d="M9 19h6" stroke="url(#npGradCart)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>Cart</span>
+      <span class="nav-badge" id="navCartBadge" style="display:none">0</span>
+    </button>
+
+    <button class="home-nav-item" data-nav="account">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="npGradAcc" gradientUnits="userSpaceOnUse" x1="12" y1="3" x2="12" y2="21">
+              <stop class="np-s1" offset="0"/>
+              <stop class="np-s2" offset="1"/>
+            </linearGradient>
+            <clipPath id="npClipAcc"><circle cx="12" cy="12" r="9.3"/></clipPath>
+          </defs>
+          <circle cx="12" cy="12" r="9.3" fill="url(#npGradAcc)"/>
+          <g clip-path="url(#npClipAcc)">
+            <circle cx="12" cy="9.6" r="3.4" fill="#fff" fill-opacity=".92"/>
+            <path d="M3.8 21.8a8.2 8.2 0 0 1 16.4 0Z" fill="#fff" fill-opacity=".92"/>
+          </g>
+        </svg>
+      </span>
+      <span>My Nypadrox</span>
+    </button>
   </nav>
 
   <div class="home-toast" id="homeToast"></div>
@@ -921,6 +1048,27 @@ function updateChatBadge(){
 }
 
 /* ============================================================
+   WISHLIST BADGE (heart icon in app bar)
+   ============================================================ */
+function getWishlistCount(){
+  try{
+    const w=JSON.parse(localStorage.getItem('np_wish')||'[]');
+    return Array.isArray(w)?w.length:0;
+  }catch(e){return 0}
+}
+function updateWishBadge(){
+  const el=$('homeWishBadge');
+  if(!el)return;
+  const n=getWishlistCount();
+  if(n>0){
+    el.textContent=n>99?'99+':n;
+    el.style.display='flex';
+  }else{
+    el.style.display='none';
+  }
+}
+
+/* ============================================================
    VIDEO SEEN TRACKING
    ============================================================ */
 function getSeenVideos(){
@@ -954,6 +1102,9 @@ function markAllVideosSeen(){
 
 /* ============================================================
    AI CHARACTER-BY-CHARACTER TYPING
+   — Now reads in natural, smooth phrases like DeepSeek.
+     Speech is queued per complete sentence/clause so it flows
+     like a normal AI assistant instead of choppy single words.
    ============================================================ */
 function typeBotMessage(text,onDone){
   if(!chatBubblesEl)return;
@@ -964,7 +1115,13 @@ function typeBotMessage(text,onDone){
 
   const raw=String(text??'');
   let i=0;
+  let spokenUpTo=0;
   const cursor='<span class="typing-cursor"></span>';
+
+  // Fresh start: cancel anything still playing from a previous message
+  if(speakerOn && 'speechSynthesis' in window){
+    try{ speechSynthesis.cancel(); }catch(e){}
+  }
 
   function render(){
     const shown=raw.slice(0,i);
@@ -973,17 +1130,71 @@ function typeBotMessage(text,onDone){
     scrollChat();
   }
 
+  // Speak a natural phrase once we hit a sentence or clause boundary.
+  // This is what makes the voice flow like DeepSeek instead of choppy words.
+  function speakCompletedPhrases(){
+    if(!speakerOn || !('speechSynthesis' in window)) return;
+    const pending = raw.slice(spokenUpTo, i);
+    if(!pending) return;
+
+    // Look for the LAST sentence/clause boundary inside the pending slice
+    let cut = -1;
+    for(let k = pending.length - 1; k >= 0; k--){
+      const ch = pending[k];
+      const next = pending[k+1];
+      // Hard sentence enders — safe to speak a full sentence
+      if(ch === '.' || ch === '!' || ch === '?' || ch === '\n'){
+        cut = k + 1;
+        break;
+      }
+      // Soft clause enders — only if followed by space or end of slice
+      if((ch === ',' || ch === ';' || ch === ':') &&
+         (next === undefined || /\s/.test(next))){
+        cut = k + 1;
+        break;
+      }
+    }
+    if(cut < 0) return;
+
+    const phrase = pending.slice(0, cut).replace(/\*/g,'').replace(/\s+/g,' ').trim();
+    spokenUpTo += cut;
+    if(!phrase) return;
+
+    try{
+      const u = new SpeechSynthesisUtterance(phrase);
+      u.rate = 1.0;     // natural, conversational pace — like DeepSeek
+      u.pitch = 1.0;
+      u.volume = 1.0;
+      u.lang = 'en-US';
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+
   function tick(){
-    if(i<raw.length){
+    if(i < raw.length){
       i++;
       render();
-      setTimeout(tick,20);
+      speakCompletedPhrases();
+      setTimeout(tick, 22); // smooth visual typing pace
     } else {
-      let html=esc(raw).replace(/\n/g,'<br>').replace(/\*([^*]+)\*/g,'<strong>$1</strong>');
-      b.innerHTML=html+'<div class="timestamp"></div>';
+      // Flush whatever remains that had no final boundary
+      if(speakerOn && 'speechSynthesis' in window && spokenUpTo < raw.length){
+        try{
+          const tail = raw.slice(spokenUpTo).replace(/\*/g,'').replace(/\s+/g,' ').trim();
+          if(tail){
+            const u = new SpeechSynthesisUtterance(tail);
+            u.rate = 1.0;
+            u.pitch = 1.0;
+            u.volume = 1.0;
+            u.lang = 'en-US';
+            speechSynthesis.speak(u);
+          }
+        }catch(e){}
+      }
+      let html = esc(raw).replace(/\n/g,'<br>').replace(/\*([^*]+)\*/g,'<strong>$1</strong>');
+      b.innerHTML = html + '<div class="timestamp"></div>';
       scrollChat();
-      if(typeof onDone==='function')onDone();
-      if(speakerOn)speakText(raw.replace(/\s+/g,' ').trim());
+      if(typeof onDone === 'function') onDone();
     }
   }
   tick();
@@ -1133,12 +1344,12 @@ function buildCarousel(){
 }
 
 /* ============================================================
-   PRODUCTS
+   PRODUCTS — 2-second max wait
    ============================================================ */
 async function loadProducts(){
   try{
     const ctrl=new AbortController();
-    const tid=setTimeout(()=>{try{ctrl.abort()}catch(e){}},10000);
+    const tid=setTimeout(()=>{try{ctrl.abort()}catch(e){}},2000);
     const r=await fetch(`${API}/api/products`,{signal:ctrl.signal});
     clearTimeout(tid);
     const d=await r.json();
@@ -1202,6 +1413,7 @@ function toggleWish(key){
   else{w.push(key);homeToast('Added to wishlist')}
   localStorage.setItem('np_wish',JSON.stringify(w));
   renderHomeGrid();
+  updateWishBadge();
 }
 
 /* ============================================================
@@ -1749,7 +1961,8 @@ function startMic(){
 function speakText(t){
   if(!('speechSynthesis' in window)||!t)return;
   try{speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(t);u.rate=1;u.pitch=1;u.lang='en-US';
+    const u=new SpeechSynthesisUtterance(t);
+    u.rate=1.0;u.pitch=1.0;u.volume=1.0;u.lang='en-US';
     speechSynthesis.speak(u);
   }catch(e){}
 }
@@ -1816,7 +2029,7 @@ function toggleAccBubble(){ const b=$('accBubble');if(!b)return; b.classList.tog
 function closeAccBubble(){const b=$('accBubble');if(b)b.classList.remove('open')}
 
 /* ============================================================
-   HOME NAV — UPDATED to move active blue color
+   HOME NAV — moves active blue color
    ============================================================ */
 document.querySelectorAll('.home-nav-item').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -1884,10 +2097,14 @@ if($('authBtn'))$('authBtn').onclick=async()=>{
   const err=$('loginErr'),ok=$('loginOk');
   if(err)err.style.display='none';
   if(ok)ok.style.display='none';
+  const btn=$('authBtn');
+  const restoreText=()=>{ btn.classList.remove('loading'); btn.textContent=loginMode?'Login':'Create Account'; };
   if(loginMode){
     const u=$('username').value.trim(),p=$('password').value.trim();
     if(!u||!p){if(err){err.textContent='Enter username and password';err.style.display='block'}return}
-    $('authBtn').disabled=true;$('authBtn').textContent='Logging in...';
+    btn.disabled=true;
+    btn.classList.add('loading');
+    btn.innerHTML='<span class="btn-spinner"></span>';
     try{
       const r=await fetch(`${API}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
       const d=await r.json();
@@ -1895,39 +2112,52 @@ if($('authBtn'))$('authBtn').onclick=async()=>{
         localStorage.setItem('loggedInUser',u);
         localStorage.setItem('session_id',d.session_id||'');
         if(d.token)localStorage.setItem('jwt_token',d.token);
+        // ---- Clear username & password fields after successful login ----
+        $('username').value='';
+        $('password').value='';
+        // ------------------------------------------------------------------
         if(ok){ok.textContent='Login successful!';ok.style.display='block'}
         if(loginPageEl && !loginPageEl.classList.contains('hidden')){ npExitScreen(); } else { hide(loginPageEl); }
-        const btn=$('homeLoginBtn');if(btn)btn.textContent='Account';
+        const hbtn=$('homeLoginBtn');if(hbtn)hbtn.textContent='Account';
         setTimeout(()=>{
           const tk=localStorage.getItem('jwt_token');if(tk)connectSSE(tk);
-          if(pendingOrderKey){ const k=pendingOrderKey;pendingOrderKey=null; openChat(true);setTimeout(()=>startOrder(k),400); }
-          else if(pendingCartCheckout){ pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),400); }
+          if(pendingOrderKey){ const k=pendingOrderKey;pendingOrderKey=null; openChat(true);setTimeout(()=>startOrder(k),200); }
+          else if(pendingCartCheckout){ pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),200); }
           else { show(homePageEl); homeToast('Welcome, '+u); }
           updateVideoBadge();
-        },500);
+        },200);
       } else if(err){err.textContent=d.message||'Invalid credentials';err.style.display='block'}
     }catch(e){if(err){err.textContent='Server error';err.style.display='block'}}
-    finally{$('authBtn').disabled=false;$('authBtn').textContent='Login'}
+    finally{btn.disabled=false;restoreText();}
   } else {
     const fn=$('firstName').value.trim(),ln=$('lastName').value.trim(),em=$('email').value.trim(),p=$('regPassword').value,p2=$('confirmPassword').value;
     if(!fn||!ln||!em||!p||!p2){if(err){err.textContent='All fields required';err.style.display='block'}return}
     if(p!==p2){if(err){err.textContent='Passwords do not match';err.style.display='block'}return}
     if(p.length<8||!/[A-Z]/.test(p)||!/[a-z]/.test(p)||!/\d/.test(p)||!/[!@#$%^&*(),.?":{}|<>]/.test(p)){if(err){err.textContent='Password too weak';err.style.display='block'}return}
-    $('authBtn').disabled=true;$('authBtn').textContent='Creating...';
+    btn.disabled=true;
+    btn.classList.add('loading');
+    btn.innerHTML='<span class="btn-spinner"></span>';
     try{
       const r=await fetch(`${API}/api/register`,{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({username:em.split('@')[0],password:p,first_name:fn,last_name:ln,email:em,phone:''})});
       const d=await r.json();
       if(r.ok&&d.success){
         if(ok){ok.textContent='Account created! You can login.';ok.style.display='block'}
-        setTimeout(()=>{$('switchMode').click();$('username').value=d.username||em.split('@')[0]},1800);
+        setTimeout(()=>{$('switchMode').click();$('username').value=d.username||em.split('@')[0]},800);
       } else if(err){err.textContent=d.message||'Registration failed';err.style.display='block'}
     }catch(e){if(err){err.textContent='Server error';err.style.display='block'}}
-    finally{$('authBtn').disabled=false;$('authBtn').textContent='Create Account'}
+    finally{btn.disabled=false;restoreText();}
   }
 };
 
-if($('googleBtn'))$('googleBtn').onclick=()=>{window.location.href=`${API}/api/google_login`};
+if($('googleBtn'))$('googleBtn').onclick=()=>{
+  const g=$('googleBtn');
+  if(g.classList.contains('loading')) return;
+  g.classList.add('loading');
+  g.disabled=true;
+  g.innerHTML='<span class="btn-spinner dark"></span><span style="color:#374151">Redirecting...</span>';
+  setTimeout(()=>{ window.location.href=`${API}/api/google_login`; }, 120);
+};
 
 (function(){
   try{
@@ -1942,12 +2172,12 @@ if($('googleBtn'))$('googleBtn').onclick=()=>{window.location.href=`${API}/api/g
         if(loginPageEl && !loginPageEl.classList.contains('hidden')) npExitScreen();
         else hide(loginPageEl);
         const btn=$('homeLoginBtn');if(btn)btn.textContent='Account';
-        if(pendingOrderKey){const k=pendingOrderKey;pendingOrderKey=null;openChat(true);setTimeout(()=>startOrder(k),400)}
-        else if(pendingCartCheckout){pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),400)}
+        if(pendingOrderKey){const k=pendingOrderKey;pendingOrderKey=null;openChat(true);setTimeout(()=>startOrder(k),200)}
+        else if(pendingCartCheckout){pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),200)}
         else show(homePageEl);
         connectSSE(tk);
         updateVideoBadge();
-      },500);
+      },200);
     }
   }catch(e){}
 })();
@@ -2191,6 +2421,7 @@ window.onload=()=>{
     hide(chatPageEl);
     updateCartBadges();
     updateChatBadge();
+    updateWishBadge();
     refreshInstall();
   }catch(err){console.error('Show home error:',err)}
 
