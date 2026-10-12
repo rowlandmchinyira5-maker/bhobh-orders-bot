@@ -50,9 +50,6 @@ input{font-family:inherit}
                border-radius:50%;animation:spin 1s linear infinite;margin-top:26px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ============================================================
-   ANTICLOCKWISE LOADING SPINNER (for auth buttons)
-   ============================================================ */
 @keyframes spinCCW{to{transform:rotate(-360deg)}}
 .btn-spinner{
   display:inline-block;
@@ -76,7 +73,6 @@ input{font-family:inherit}
   pointer-events:none;
   opacity:.92;
 }
-/* ============================================================ */
 
 #homePage{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:500;overflow:hidden;
           padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
@@ -182,10 +178,6 @@ input{font-family:inherit}
 .home-card-wish.active{color:#ff3b30}
 .home-empty{grid-column:1/-1;text-align:center;padding:40px 20px;color:#888;font-size:14px}
 
-/* ============================================================
-   BOTTOM NAVIGATION — Modern realistic SVG icons
-   (Dark gray stops for optimum visibility on white nav bar)
-   ============================================================ */
 .home-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card-bg);border-top:1px solid var(--line);
           display:flex;justify-content:space-around;padding:6px 4px calc(6px + var(--safe-bottom));z-index:60;
           box-shadow:0 -4px 14px rgba(0,0,0,.03); width: 100%;}
@@ -207,7 +199,6 @@ input{font-family:inherit}
   transition: transform 0.2s ease;
 }
 .home-nav-item .nav-icon svg{display:block;width:22px;height:22px;}
-/* Optimum dark gray for inactive icons */
 .home-nav-item .nav-icon svg .np-s1{stop-color:#6b7280;transition:stop-color .2s ease}
 .home-nav-item .nav-icon svg .np-s2{stop-color:#4b5563;transition:stop-color .2s ease}
 .home-nav-item.active{color: var(--nav-active-blue); font-weight: 700;}
@@ -217,7 +208,6 @@ input{font-family:inherit}
 .home-nav-item .nav-badge{position:absolute;top:2px;right:24%;background:#ff3b30;color:#fff;font-size:9px;
                           font-weight:700;min-width:16px;height:16px;padding:0 4px;border-radius:8px;
                           display:flex;align-items:center;justify-content:center;border:2px solid #fff}
-/* ============================================================ */
 
 .login-box{
     width: 92%;max-width: 420px;padding: 40px 30px 30px 30px;background: var(--card-bg);
@@ -924,13 +914,14 @@ input{font-family:inherit}
 
 <button class="install-btn" id="installBtn"><i class="fas fa-download"></i><span>Install App</span></button>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-
 <script>
 /* ============================================================
    GLOBALS
    ============================================================ */
-const API='https://akhopwa.onrender.com';
+const API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:5000'
+  : 'https://akhopwa.onrender.com';
+
 let allProducts=[];
 let allVideos=[];
 let currentCart=[],currentOrderStep=0,orderData={};
@@ -942,6 +933,91 @@ let resetEmail='',tempToken='';
 let isRecording=false,speakerOn=false,recognition=null;
 let selectedProv=null,pendingPayData=null,isProcessingPay=false;
 let eventSource=null,sseRetries=0;
+
+/* ============================================================
+   CLIENT-SIDE CACHE — reduces origin hits by ~10x
+   ============================================================ */
+const CACHE_PRODUCTS_KEY = 'np_cache_products_v1';
+const CACHE_VIDEOS_KEY   = 'np_cache_videos_v1';
+const CACHE_PRODUCTS_TTL = 60 * 1000;         // 60 seconds
+const CACHE_VIDEOS_TTL   = 5 * 60 * 1000;     // 5 minutes
+
+function npReadCache(key, ttlMs) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj || typeof obj.t !== 'number') return null;
+    if (Date.now() - obj.t > ttlMs) return null;
+    return obj.v;
+  } catch { return null; }
+}
+function npWriteCache(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify({ t: Date.now(), v: value }));
+  } catch (e) {
+    // Quota exceeded — clear caches and retry once
+    try {
+      localStorage.removeItem(CACHE_PRODUCTS_KEY);
+      localStorage.removeItem(CACHE_VIDEOS_KEY);
+      localStorage.setItem(key, JSON.stringify({ t: Date.now(), v: value }));
+    } catch {}
+  }
+}
+function npClearCache(key) {
+  try { localStorage.removeItem(key); } catch {}
+}
+function npSafeSet(key, value) {
+  try { localStorage.setItem(key, value); return true; }
+  catch (e) {
+    try {
+      localStorage.removeItem(CACHE_PRODUCTS_KEY);
+      localStorage.removeItem(CACHE_VIDEOS_KEY);
+      localStorage.setItem(key, value);
+      return true;
+    } catch { return false; }
+  }
+}
+function npSafeGet(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function npSafeRemove(key) {
+  try { localStorage.removeItem(key); } catch {}
+}
+
+/* ============================================================
+   FETCH WITH TIMEOUT — protects against hung requests
+   ============================================================ */
+async function npFetch(url, opts = {}, timeoutMs = 10000) {
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => { try { ctrl.abort(); } catch(e){} }, timeoutMs);
+  try {
+    return await fetch(url, { ...opts, signal: ctrl.signal });
+  } finally {
+    clearTimeout(tid);
+  }
+}
+
+/* ============================================================
+   AUTH HEADER HELPER
+   ============================================================ */
+function npAuthHeaders(extra) {
+  const token = npSafeGet('jwt_token') || '';
+  const h = { ...(extra || {}) };
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  return h;
+}
+
+/* ============================================================
+   DEBOUNCE
+   ============================================================ */
+function npDebounce(fn, ms) {
+  let t;
+  return function(...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
 
 /* ============================================================
    DOM HELPERS
@@ -994,7 +1070,7 @@ function money(m,u){return 'MK '+Number(m||0).toLocaleString()+' ($'+Number(u||0
 function moneyM(m){return 'MK '+Number(m||0).toLocaleString()}
 function scrollChat(){if(chatBodyEl)chatBodyEl.scrollTop=chatBodyEl.scrollHeight}
 function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
-function isLoggedIn(){return !!localStorage.getItem('loggedInUser')}
+function isLoggedIn(){return !!npSafeGet('loggedInUser')}
 
 function toast(title,msg){
   if(!toastContainer)return;
@@ -1010,7 +1086,7 @@ function homeToast(msg){
 }
 
 /* ============================================================
-   ACTIVE NAV TAB — Moves blue color when user taps
+   ACTIVE NAV TAB
    ============================================================ */
 function setActiveNav(navName){
   document.querySelectorAll('.home-nav-item').forEach(btn=>{
@@ -1022,11 +1098,11 @@ function setActiveNav(navName){
    AI CHAT ORDER NOTIFICATION BADGE
    ============================================================ */
 function getPendingOrders(){
-  const n=parseInt(localStorage.getItem('np_pending_orders')||'0',10);
+  const n=parseInt(npSafeGet('np_pending_orders')||'0',10);
   return isNaN(n)||n<0?0:n;
 }
 function setPendingOrders(n){
-  try{localStorage.setItem('np_pending_orders',String(Math.max(0,n|0)))}catch(e){}
+  npSafeSet('np_pending_orders', String(Math.max(0,n|0)));
   updateChatBadge();
 }
 function incrementOrderBadge(){
@@ -1048,11 +1124,11 @@ function updateChatBadge(){
 }
 
 /* ============================================================
-   WISHLIST BADGE (heart icon in app bar)
+   WISHLIST BADGE
    ============================================================ */
 function getWishlistCount(){
   try{
-    const w=JSON.parse(localStorage.getItem('np_wish')||'[]');
+    const w=JSON.parse(npSafeGet('np_wish')||'[]');
     return Array.isArray(w)?w.length:0;
   }catch(e){return 0}
 }
@@ -1072,11 +1148,11 @@ function updateWishBadge(){
    VIDEO SEEN TRACKING
    ============================================================ */
 function getSeenVideos(){
-  try{return JSON.parse(localStorage.getItem('np_seen_videos')||'[]')}
+  try{return JSON.parse(npSafeGet('np_seen_videos')||'[]')}
   catch(e){return[]}
 }
 function setSeenVideos(arr){
-  try{localStorage.setItem('np_seen_videos',JSON.stringify(arr))}catch(e){}
+  npSafeSet('np_seen_videos', JSON.stringify(arr));
 }
 function updateVideoBadge(){
   const badge=$('homeVideoBadge');
@@ -1102,9 +1178,6 @@ function markAllVideosSeen(){
 
 /* ============================================================
    AI CHARACTER-BY-CHARACTER TYPING
-   — Now reads in natural, smooth phrases like DeepSeek.
-     Speech is queued per complete sentence/clause so it flows
-     like a normal AI assistant instead of choppy single words.
    ============================================================ */
 function typeBotMessage(text,onDone){
   if(!chatBubblesEl)return;
@@ -1118,7 +1191,6 @@ function typeBotMessage(text,onDone){
   let spokenUpTo=0;
   const cursor='<span class="typing-cursor"></span>';
 
-  // Fresh start: cancel anything still playing from a previous message
   if(speakerOn && 'speechSynthesis' in window){
     try{ speechSynthesis.cancel(); }catch(e){}
   }
@@ -1130,24 +1202,19 @@ function typeBotMessage(text,onDone){
     scrollChat();
   }
 
-  // Speak a natural phrase once we hit a sentence or clause boundary.
-  // This is what makes the voice flow like DeepSeek instead of choppy words.
   function speakCompletedPhrases(){
     if(!speakerOn || !('speechSynthesis' in window)) return;
     const pending = raw.slice(spokenUpTo, i);
     if(!pending) return;
 
-    // Look for the LAST sentence/clause boundary inside the pending slice
     let cut = -1;
     for(let k = pending.length - 1; k >= 0; k--){
       const ch = pending[k];
       const next = pending[k+1];
-      // Hard sentence enders — safe to speak a full sentence
       if(ch === '.' || ch === '!' || ch === '?' || ch === '\n'){
         cut = k + 1;
         break;
       }
-      // Soft clause enders — only if followed by space or end of slice
       if((ch === ',' || ch === ';' || ch === ':') &&
          (next === undefined || /\s/.test(next))){
         cut = k + 1;
@@ -1162,7 +1229,7 @@ function typeBotMessage(text,onDone){
 
     try{
       const u = new SpeechSynthesisUtterance(phrase);
-      u.rate = 1.0;     // natural, conversational pace — like DeepSeek
+      u.rate = 1.0;
       u.pitch = 1.0;
       u.volume = 1.0;
       u.lang = 'en-US';
@@ -1175,9 +1242,8 @@ function typeBotMessage(text,onDone){
       i++;
       render();
       speakCompletedPhrases();
-      setTimeout(tick, 22); // smooth visual typing pace
+      setTimeout(tick, 22);
     } else {
-      // Flush whatever remains that had no final boundary
       if(speakerOn && 'speechSynthesis' in window && spokenUpTo < raw.length){
         try{
           const tail = raw.slice(spokenUpTo).replace(/\*/g,'').replace(/\s+/g,' ').trim();
@@ -1201,7 +1267,7 @@ function typeBotMessage(text,onDone){
 }
 
 /* ============================================================
-   CHAT BUBBLES (non-typing helpers)
+   CHAT BUBBLES
    ============================================================ */
 function addTyping(){
   if(!chatBubblesEl)return;
@@ -1344,18 +1410,30 @@ function buildCarousel(){
 }
 
 /* ============================================================
-   PRODUCTS — 2-second max wait
+   PRODUCTS — cached, 5s timeout, stale-on-error fallback
    ============================================================ */
-async function loadProducts(){
+async function loadProducts(force = false){
+  if (!force) {
+    const cached = npReadCache(CACHE_PRODUCTS_KEY, CACHE_PRODUCTS_TTL);
+    if (Array.isArray(cached) && cached.length) {
+      allProducts = cached;
+      return true;
+    }
+  }
   try{
-    const ctrl=new AbortController();
-    const tid=setTimeout(()=>{try{ctrl.abort()}catch(e){}},2000);
-    const r=await fetch(`${API}/api/products`,{signal:ctrl.signal});
-    clearTimeout(tid);
-    const d=await r.json();
-    if(d.success&&Array.isArray(d.products)){allProducts=d.products;return true}
+    const r = await npFetch(`${API}/api/products`, {}, 5000);
+    const d = await r.json();
+    if(d.success && Array.isArray(d.products)){
+      allProducts = d.products;
+      npWriteCache(CACHE_PRODUCTS_KEY, d.products);
+      return true;
+    }
     return false;
-  }catch(e){return false}
+  }catch(e){
+    const stale = npReadCache(CACHE_PRODUCTS_KEY, Infinity);
+    if (Array.isArray(stale) && stale.length) { allProducts = stale; return true; }
+    return false;
+  }
 }
 
 /* ============================================================
@@ -1383,7 +1461,7 @@ function renderHomeGrid(){
     list=list.filter(p=>[p.name,p.category,p.description,p.features].join(' ').toLowerCase().includes(q));
   }
   if(!list.length){g.innerHTML='<div class="home-empty">No products found.</div>';return}
-  const wish=JSON.parse(localStorage.getItem('np_wish')||'[]');
+  const wish=JSON.parse(npSafeGet('np_wish')||'[]');
   g.innerHTML=list.map(p=>{
     const stock=Number(p.stock||0);const avail=stock>0;const inW=wish.includes(p.key);
     return `<div class="home-card">
@@ -1407,11 +1485,11 @@ function renderHomeGrid(){
   }).join('');
 }
 function toggleWish(key){
-  let w=JSON.parse(localStorage.getItem('np_wish')||'[]');
+  let w=JSON.parse(npSafeGet('np_wish')||'[]');
   const i=w.indexOf(key);
   if(i>-1){w.splice(i,1);homeToast('Removed from wishlist')}
   else{w.push(key);homeToast('Added to wishlist')}
-  localStorage.setItem('np_wish',JSON.stringify(w));
+  npSafeSet('np_wish', JSON.stringify(w));
   renderHomeGrid();
   updateWishBadge();
 }
@@ -1482,7 +1560,7 @@ function openChat(preserveChat){
     npEnterScreen(()=>{ hide(chatPageEl); show(homePageEl); renderHomeGrid(); });
   }
 
-  const user=localStorage.getItem('loggedInUser')||'guest';
+  const user=npSafeGet('loggedInUser')||'guest';
   const lbl=$('chatUserLabel');if(lbl)lbl.textContent='Logged in as '+user;
 
   const mc=$('marketplaceContent');
@@ -1492,7 +1570,7 @@ function openChat(preserveChat){
     chatBubblesEl.style.display='flex';
     if(!preserveChat){
       chatBubblesEl.innerHTML='';
-      const name=localStorage.getItem('loggedInUser')||'there';
+      const name=npSafeGet('loggedInUser')||'there';
       typeBotMessage(`Hi ${name}! 👋\n\nI'm your NyPadrox AI shopping assistant.\n\nAsk me about any product — for example:\n• "Do you have solar panels?"\n• "Show me phones"\n• "How much is a fridge?"\n\nI'll show you real product images and details on request.`);
     }
   }
@@ -1616,15 +1694,19 @@ function handleCheckoutStep(msg){
 }
 
 async function sendOrder(){
-  const user=localStorage.getItem('loggedInUser')||'guest';
+  const user=npSafeGet('loggedInUser')||'guest';
   const payload={
     items:currentCart,customer:orderData,
     total_mwk:currentCart.reduce((s,i)=>s+i.price_mwk*i.quantity,0),
     total_usd:currentCart.reduce((s,i)=>s+i.price_usd*i.quantity,0),
-    username:user,session_id:localStorage.getItem('session_id')||'default'
+    username:user,session_id:npSafeGet('session_id')||'default'
   };
   try{
-    const r=await fetch(`${API}/api/order/place`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const r = await npFetch(`${API}/api/order/place`, {
+      method: 'POST',
+      headers: npAuthHeaders({'Content-Type':'application/json'}),
+      body: JSON.stringify(payload)
+    }, 20000);
     const d=await r.json();
     if(d.success){
       addBotMsg(`<div class="product-details" style="background:#d4edda;border-left-color:#28a745">
@@ -1641,16 +1723,21 @@ async function sendOrder(){
 }
 
 /* ============================================================
-   AI CHAT
+   AI CHAT — now with Authorization header, no cart payload
    ============================================================ */
 async function sendToBot(text){
-  const user=localStorage.getItem('loggedInUser')||'guest';
+  const user=npSafeGet('loggedInUser')||'guest';
   addTyping();
   try{
-    const r=await fetch(`${API}/api/chat`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:text,username:user,session_id:localStorage.getItem('session_id')||'default',cart:currentCart})
-    });
+    const r = await npFetch(`${API}/api/chat`, {
+      method: 'POST',
+      headers: npAuthHeaders({'Content-Type':'application/json'}),
+      body: JSON.stringify({
+        message: text,
+        username: user,
+        session_id: npSafeGet('session_id')||'default'
+      })
+    }, 15000);
     const d=await r.json();
     removeTyping();
     if(!r.ok){typeBotMessage('Bot error. Try again.');return}
@@ -1709,7 +1796,7 @@ function renderCatalog(d){
 }
 
 /* ============================================================
-   VIDEOS
+   VIDEOS — cached with 5min TTL
    ============================================================ */
 async function openVideos(){
   if(!isLoggedIn()){
@@ -1731,15 +1818,31 @@ async function openVideos(){
 window.openVideos=openVideos;
 function closeVideos(){ const m=$('videoModal'); if(!m || !m.classList.contains('open')) return; npExitScreen(); }
 window.closeVideos=closeVideos;
-async function loadVideos(){
+
+async function loadVideos(force = false){
+  if (!force) {
+    const cached = npReadCache(CACHE_VIDEOS_KEY, CACHE_VIDEOS_TTL);
+    if (Array.isArray(cached)) {
+      allVideos = cached;
+      updateVideoBadge();
+      return;
+    }
+  }
   try{
-    const r=await fetch(`${API}/api/videos`);
-    const d=await r.json();
-    if(d.success)allVideos=d.videos||[];
-    else allVideos=[];
-  }catch(e){allVideos=[]}
+    const r = await npFetch(`${API}/api/videos`, {}, 8000);
+    const d = await r.json();
+    if(d.success){
+      allVideos = d.videos||[];
+      npWriteCache(CACHE_VIDEOS_KEY, allVideos);
+    } else allVideos=[];
+  }catch(e){
+    const stale = npReadCache(CACHE_VIDEOS_KEY, Infinity);
+    if (Array.isArray(stale)) allVideos = stale;
+    else allVideos = [];
+  }
   updateVideoBadge();
 }
+
 function renderVideoGrid(){
   const g=$('videoGrid');if(!g)return;
   const c=$('videoCount');if(c)c.textContent=allVideos.length+' videos';
@@ -1768,7 +1871,7 @@ function renderVideoGrid(){
 }
 
 /* ============================================================
-   FIXED: playVideo now increments view count
+   playVideo — view count comes from the server, no fake POST
    ============================================================ */
 async function playVideo(key){
   if(!isLoggedIn()){ showLoginWithMessage('Please login to watch videos'); return; }
@@ -1776,21 +1879,18 @@ async function playVideo(key){
   let v=allVideos.find(x=>x.key===key);
   if(!v){
     try{
-      const r=await fetch(`${API}/api/video/${key}`);
+      const r = await npFetch(`${API}/api/video/${key}`, {}, 8000);
       const d=await r.json();
       if(d.success)v=d.video;
     }catch(e){}
   }
   if(!v)return;
 
-  // Increment view count on backend
-  try{
-    await fetch(`${API}/api/video/${key}/view`, { method:'POST' });
-    v.views = (v.views||0) + 1;
-    // Update local cache
+  // Server increments views on the GET above; refresh local copy
+  if (v.views != null) {
     const cached = allVideos.find(x=>x.key===key);
-    if(cached) cached.views = v.views;
-  }catch(e){ console.warn('View count failed:', e); }
+    if (cached) cached.views = v.views;
+  }
 
   const p=$('videoPlayerModal');
   if(p && !p.classList.contains('open')){
@@ -1882,10 +1982,11 @@ async function doPay(){
       items:items.map(i=>({name:i.name,quantity:i.quantity,price:i.price_mwk})),
       order_id:'ORD-'+Date.now()
     };
-    const r=await fetch(`${API}/api/mobile-money/pay`,{
-      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('jwt_token')||'')},
-      body:JSON.stringify(payload)
-    });
+    const r = await npFetch(`${API}/api/mobile-money/pay`, {
+      method: 'POST',
+      headers: npAuthHeaders({'Content-Type':'application/json'}),
+      body: JSON.stringify(payload)
+    }, 30000);
     const d=await r.json();
     if(d.success){
       mmStatus('Payment successful!','ok');
@@ -1893,10 +1994,14 @@ async function doPay(){
         items:items,customer:pendingPayData?pendingPayData.customer:orderData,total_mwk:tM,
         payment_method:'Mobile Money',payment_provider:provName,payment_status:'paid',
         transaction_id:d.transaction_id||'N/A',
-        username:localStorage.getItem('loggedInUser')||'guest',
-        session_id:localStorage.getItem('session_id')||'default'
+        username:npSafeGet('loggedInUser')||'guest',
+        session_id:npSafeGet('session_id')||'default'
       };
-      const r2=await fetch(`${API}/api/order/place`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(orderPayload)});
+      const r2 = await npFetch(`${API}/api/order/place`, {
+        method: 'POST',
+        headers: npAuthHeaders({'Content-Type':'application/json'}),
+        body: JSON.stringify(orderPayload)
+      }, 20000);
       const d2=await r2.json();
       if(d2.success){
         closeMM();
@@ -2029,7 +2134,7 @@ function toggleAccBubble(){ const b=$('accBubble');if(!b)return; b.classList.tog
 function closeAccBubble(){const b=$('accBubble');if(b)b.classList.remove('open')}
 
 /* ============================================================
-   HOME NAV — moves active blue color
+   HOME NAV
    ============================================================ */
 document.querySelectorAll('.home-nav-item').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -2106,21 +2211,24 @@ if($('authBtn'))$('authBtn').onclick=async()=>{
     btn.classList.add('loading');
     btn.innerHTML='<span class="btn-spinner"></span>';
     try{
-      const r=await fetch(`${API}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+      const r = await npFetch(`${API}/api/login`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({username:u,password:p})
+      }, 15000);
       const d=await r.json();
       if(r.ok&&d.success){
-        localStorage.setItem('loggedInUser',u);
-        localStorage.setItem('session_id',d.session_id||'');
-        if(d.token)localStorage.setItem('jwt_token',d.token);
-        // ---- Clear username & password fields after successful login ----
+        npSafeSet('loggedInUser', u);
+        npSafeSet('session_id', d.session_id||'');
+        if(d.token)npSafeSet('jwt_token', d.token);
         $('username').value='';
         $('password').value='';
-        // ------------------------------------------------------------------
         if(ok){ok.textContent='Login successful!';ok.style.display='block'}
         if(loginPageEl && !loginPageEl.classList.contains('hidden')){ npExitScreen(); } else { hide(loginPageEl); }
         const hbtn=$('homeLoginBtn');if(hbtn)hbtn.textContent='Account';
         setTimeout(()=>{
-          const tk=localStorage.getItem('jwt_token');if(tk)connectSSE(tk);
+          // Start video poller instead of SSE for regular users
+          startVideoPolling();
           if(pendingOrderKey){ const k=pendingOrderKey;pendingOrderKey=null; openChat(true);setTimeout(()=>startOrder(k),200); }
           else if(pendingCartCheckout){ pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),200); }
           else { show(homePageEl); homeToast('Welcome, '+u); }
@@ -2138,8 +2246,11 @@ if($('authBtn'))$('authBtn').onclick=async()=>{
     btn.classList.add('loading');
     btn.innerHTML='<span class="btn-spinner"></span>';
     try{
-      const r=await fetch(`${API}/api/register`,{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({username:em.split('@')[0],password:p,first_name:fn,last_name:ln,email:em,phone:''})});
+      const r = await npFetch(`${API}/api/register`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({username:em.split('@')[0],password:p,first_name:fn,last_name:ln,email:em,phone:''})
+      }, 15000);
       const d=await r.json();
       if(r.ok&&d.success){
         if(ok){ok.textContent='Account created! You can login.';ok.style.display='block'}
@@ -2164,9 +2275,9 @@ if($('googleBtn'))$('googleBtn').onclick=()=>{
     const p=new URLSearchParams(location.search);
     const tk=p.get('token'),sid=p.get('session_id'),un=p.get('username');
     if(tk&&sid&&un){
-      localStorage.setItem('loggedInUser',un);
-      localStorage.setItem('session_id',sid);
-      localStorage.setItem('jwt_token',tk);
+      npSafeSet('loggedInUser', un);
+      npSafeSet('session_id', sid);
+      npSafeSet('jwt_token', tk);
       history.replaceState({},document.title,location.pathname);
       setTimeout(()=>{
         if(loginPageEl && !loginPageEl.classList.contains('hidden')) npExitScreen();
@@ -2175,7 +2286,7 @@ if($('googleBtn'))$('googleBtn').onclick=()=>{
         if(pendingOrderKey){const k=pendingOrderKey;pendingOrderKey=null;openChat(true);setTimeout(()=>startOrder(k),200)}
         else if(pendingCartCheckout){pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),200)}
         else show(homePageEl);
-        connectSSE(tk);
+        startVideoPolling();
         updateVideoBadge();
       },200);
     }
@@ -2183,10 +2294,11 @@ if($('googleBtn'))$('googleBtn').onclick=()=>{
 })();
 
 function logout(){
-  if(eventSource){eventSource.close();eventSource=null}
-  localStorage.removeItem('loggedInUser');
-  localStorage.removeItem('session_id');
-  localStorage.removeItem('jwt_token');
+  if(eventSource){try{eventSource.close()}catch(e){};eventSource=null}
+  stopVideoPolling();
+  npSafeRemove('loggedInUser');
+  npSafeRemove('session_id');
+  npSafeRemove('jwt_token');
   hide(chatPageEl);
   hide(loginPageEl);
   show(homePageEl);
@@ -2227,7 +2339,11 @@ if($('sendCodeBtn'))$('sendCodeBtn').onclick=async function(){
   if(!em||!em.includes('@')){alert('Enter a valid email');return}
   this.disabled=true;this.textContent='Sending...';
   try{
-    const r=await fetch(`${API}/api/forgot-password`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em})});
+    const r = await npFetch(`${API}/api/forgot-password`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email:em})
+    }, 20000);
     const d=await r.json();
     if(d.success){resetEmail=em;$('rs1').style.display='none';$('rs2').style.display='block'}
     else alert(d.message||'Failed');
@@ -2239,7 +2355,11 @@ if($('verifyCodeBtn'))$('verifyCodeBtn').onclick=async function(){
   if(!c||c.length!==6){alert('Enter 6-digit code');return}
   this.disabled=true;this.textContent='Verifying...';
   try{
-    const r=await fetch(`${API}/api/verify-reset-code`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:resetEmail,reset_code:c})});
+    const r = await npFetch(`${API}/api/verify-reset-code`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email:resetEmail,reset_code:c})
+    }, 15000);
     const d=await r.json();
     if(d.success){tempToken=d.temp_token;$('rs2').style.display='none';$('rs3').style.display='block'}
     else alert(d.message||'Invalid code');
@@ -2252,8 +2372,11 @@ if($('resetPwBtn'))$('resetPwBtn').onclick=async function(){
   if(p!==p2){alert('Passwords do not match');return}
   this.disabled=true;this.textContent='Resetting...';
   try{
-    const r=await fetch(`${API}/api/reset-password`,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:resetEmail,new_password:p,temp_token:tempToken})});
+    const r = await npFetch(`${API}/api/reset-password`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email:resetEmail,new_password:p,temp_token:tempToken})
+    }, 15000);
     const d=await r.json();
     if(d.success){alert('Password reset! You can login.');closeForgot()}
     else alert(d.message||'Failed');
@@ -2268,7 +2391,7 @@ if($('homeVideoBtn'))$('homeVideoBtn').onclick=openVideos;
 if($('homeLoginBtn'))$('homeLoginBtn').onclick=()=>{
   if(isLoggedIn()){
     openChat(false);
-    const tk=localStorage.getItem('jwt_token');if(tk)connectSSE(tk);
+    startVideoPolling();
     return;
   }
   pendingOrderKey=null;pendingCartCheckout=false;
@@ -2284,7 +2407,7 @@ if($('homeCartBtn'))$('homeCartBtn').onclick=()=>{
   openChat(true);setTimeout(()=>showCart(),400);
 };
 if($('homeWishBtn'))$('homeWishBtn').onclick=()=>{
-  const w=JSON.parse(localStorage.getItem('np_wish')||'[]');
+  const w=JSON.parse(npSafeGet('np_wish')||'[]');
   if(!w.length)homeToast('Wishlist is empty');
   else homeToast('You have '+w.length+' item(s) in wishlist');
 };
@@ -2294,12 +2417,27 @@ if($('homeClearFilter'))$('homeClearFilter').onclick=()=>{
   document.querySelectorAll('.home-cat-chip').forEach(b=>b.classList.toggle('active',b.dataset.cat==='All'));
   renderHomeGrid();$('homeClearFilter').style.display='none';
 };
+
+/* ============================================================
+   DEBOUNCED SEARCH
+   ============================================================ */
 if($('homeSearchInput')){
-  $('homeSearchInput').addEventListener('input',function(){
-    homeSearchQuery=this.value;renderHomeGrid();
-    const cf=$('homeClearFilter');if(cf)cf.style.display=(homeActiveCategory==='All'&&!homeSearchQuery)?'none':'inline';
+  const doSearch = npDebounce(function(){
+    homeSearchQuery = $('homeSearchInput').value;
+    renderHomeGrid();
+    const cf = $('homeClearFilter');
+    if (cf) cf.style.display = (homeActiveCategory === 'All' && !homeSearchQuery) ? 'none' : 'inline';
+  }, 220);
+
+  $('homeSearchInput').addEventListener('input', doSearch);
+  $('homeSearchInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      homeSearchQuery = e.target.value;
+      renderHomeGrid();
+      e.target.blur();
+    }
   });
-  $('homeSearchInput').addEventListener('keypress',e=>{if(e.key==='Enter'){e.preventDefault();homeSearchQuery=e.target.value;renderHomeGrid();e.target.blur()}});
 }
 if($('homeSearchBtn'))$('homeSearchBtn').onclick=()=>{homeSearchQuery=$('homeSearchInput').value;renderHomeGrid()};
 
@@ -2342,10 +2480,11 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ============================================================
-   SSE
+   SSE — admins only, with jitter (kept for /api/events)
    ============================================================ */
-function connectSSE(token){
-  if(eventSource){eventSource.close();eventSource=null}
+function connectSSE(token, isAdmin){
+  if (!isAdmin) return;
+  if(eventSource){try{eventSource.close()}catch(e){};eventSource=null}
   if(!token)return;
   try{
     eventSource=new EventSource(`${API}/api/events?token=${token}`);
@@ -2353,15 +2492,77 @@ function connectSSE(token){
     eventSource.onmessage=e=>{
       try{
         const ev=JSON.parse(e.data);if(ev.type==='ping')return;
-        if(ev.type==='new_video'){ toast('New Video',ev.data.title||'Video uploaded'); loadVideos(); }
-        else if(ev.type==='video_updated')toast('Video Updated',ev.data.video_key||'');
-        else if(ev.type==='video_deleted'){toast('Video Deleted',ev.data.title||'');loadVideos()}
+        if(ev.type==='new_video'){
+          toast('New Video',ev.data.title||'Video uploaded');
+          npClearCache(CACHE_VIDEOS_KEY);
+          loadVideos(true).then(()=>{ try{renderVideoGrid()}catch(e){} });
+        }
+        else if(ev.type==='video_updated'){
+          toast('Video Updated',ev.data.video_key||'');
+          npClearCache(CACHE_VIDEOS_KEY);
+          loadVideos(true).then(()=>{ try{renderVideoGrid()}catch(e){} });
+        }
+        else if(ev.type==='video_deleted'){
+          toast('Video Deleted',ev.data.title||'');
+          npClearCache(CACHE_VIDEOS_KEY);
+          loadVideos(true).then(()=>{ try{renderVideoGrid()}catch(e){} });
+        }
+        else if(ev.type==='product_added' || ev.type==='product_updated' || ev.type==='product_deleted' || ev.type==='stock_updated'){
+          npClearCache(CACHE_PRODUCTS_KEY);
+          loadProducts(true).then(()=>{ try{renderHomeCats();renderHomeGrid();buildCarousel()}catch(e){} });
+        }
       }catch(err){}
     };
-    eventSource.onerror=()=>{try{eventSource.close()}catch(e){};eventSource=null;
-      if(sseRetries<5){sseRetries++;setTimeout(()=>connectSSE(token),3000*sseRetries)}}
+    eventSource.onerror=()=>{
+      try{eventSource.close()}catch(e){}
+      eventSource=null;
+      if(sseRetries<5){
+        sseRetries++;
+        const delay = 3000 * sseRetries + Math.random() * 2000;   // jitter
+        setTimeout(()=>connectSSE(token, true), delay);
+      }
+    };
   }catch(e){}
 }
+
+/* ============================================================
+   VIDEO POLLER — replaces SSE for non-admin users
+   Polls every 5 min while tab is visible, pauses when hidden
+   ============================================================ */
+let _videoPollTimer = null;
+
+async function _videoPollTick() {
+  if (document.hidden) return;
+  if (!npSafeGet('jwt_token')) return;
+  npClearCache(CACHE_VIDEOS_KEY);
+  await loadVideos(true);
+  try { renderVideoGrid(); } catch(e){}
+}
+
+function startVideoPolling() {
+  if (!npSafeGet('jwt_token')) return;
+  if (_videoPollTimer) return;
+  // First refresh after 60s, then every 5 min
+  setTimeout(_videoPollTick, 60_000);
+  _videoPollTimer = setInterval(_videoPollTick, 5 * 60_000);
+}
+
+function stopVideoPolling() {
+  if (_videoPollTimer) { clearInterval(_videoPollTimer); _videoPollTimer = null; }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopVideoPolling();
+  } else {
+    if (npSafeGet('jwt_token')) {
+      startVideoPolling();
+      // One immediate refresh on refocus
+      npClearCache(CACHE_VIDEOS_KEY);
+      loadVideos(true).then(()=>{ try{renderVideoGrid()}catch(e){} });
+    }
+  }
+});
 
 /* ============================================================
    PWA
@@ -2409,10 +2610,11 @@ window.onload=()=>{
   try{setupRec()}catch(e){}
 
   try{
-    const user=localStorage.getItem('loggedInUser');
+    const user=npSafeGet('loggedInUser');
     if(user){
       const btn=$('homeLoginBtn');if(btn)btn.textContent='Account';
-      const tk=localStorage.getItem('jwt_token');if(tk)connectSSE(tk);
+      // Start video poller for logged-in users
+      startVideoPolling();
     } else {
       const btn=$('homeLoginBtn');if(btn)btn.textContent='Sign in';
     }
