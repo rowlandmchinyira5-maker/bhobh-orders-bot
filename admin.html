@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NYPADROX Admin Console</title>
-    <!-- FIX #20: API base override hook -->
     <meta name="api-base" content="https://akhopwa.onrender.com">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk5ZUEFEUk9YIEFkbWluIiwKICAic2hvcnRfbmFtZSI6ICJOWVBBSVgiLAogICJkZXNjcmlwdGlvbiI6ICJBZG1pbiBwYW5lbCBmb3IgTllQQURST1ggZS1jb21tZXJjZSBwbGF0Zm9ybSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGQyYjNlIiwKICAidGhlbWVfY29sb3IiOiAiIzBkMmIzZSIsCiAgImljb25zIjogWwogICAgeyJzcmMiOiAiaHR0cHM6Ly9pLmltZ3VyLmNvbS84ZFpQOVZuLnBuZyIsICJzaXplcyI6ICI3Mng3MiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9LAogICAgeyJzcmMiOiAiaHR0cHM6Ly9pLmltZ3VyLmNvbS84ZFpQOVZuLnBuZyIsICJzaXplcyI6ICI5Nng5NiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9LAogICAgeyJzcmMiOiAiaHR0cHM6Ly9pLmltZ3VyLmNvbS84ZFpQOVZuLnBuZyIsICJzaXplcyI6ICIxMjh4MTI4IiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55In0sCiAgICB7InNyYyI6ICJodHRwczovL2kuaW1ndXIuY29tLzhkWlA5Vm4ucG5nIiwgInNpemVzIjogIjE0NHgxNDQiLCAidHlwZSI6ICJpbWFnZS9wbmciLCAicHVycG9zZSI6ICJhbnkifSwKICAgIHsic3JjIjogImh0dHBzOi8vaS5pbWd1ci5jb20vOGRaUDlWbi5wbmciLCAic2l6ZXMiOiAiMTUyeDE1MiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9LAogICAgeyJzcmMiOiAiaHR0cHM6Ly9pLmltZ3VyLmNvbS84ZFpQOVZuLnBuZyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55In0sCiAgICB7InNyYyI6ICJodHRwczovL2kuaW1ndXIuY29tLzhkWlA5Vm4ucG5nIiwgInNpemVzIjogIjM4NHgzODQiLCAidHlwZSI6ICJpbWFnZS9wbmciLCAicHVycG9zZSI6ICJhbnkifSwKICAgIHsic3JjIjogImh0dHBzOi8vaS5pbWd1ci5jb20vOGRaUDlWbi5wbmciLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9CiAgXQp9">
+
+    <!-- PWA metadata (extracted from index.html) -->
+    <meta name="theme-color" content="#039161">
+    <meta name="description" content="NYPADROX Admin Console — manage orders, inventory, users, and conversations.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NYPADROX Admin">
+    <meta name="application-name" content="NYPADROX Admin">
+
+    <!-- Favicons (extracted from index.html — NyPadrox logo) -->
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/57yg1jO.jpg">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/57yg1jO.jpg">
+    <link rel="apple-touch-icon" sizes="192x192" href="https://i.imgur.com/57yg1jO.jpg">
+    <link rel="apple-touch-icon" sizes="512x512" href="https://i.imgur.com/57yg1jO.jpg">
+
+    <!-- Inline manifest (URL-encoded JSON) — uses NyPadrox logo, distinct start_url for admin -->
+    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22NYPADROX%20Admin%22%2C%22short_name%22%3A%22NYPADROX%20Admin%22%2C%22description%22%3A%22Admin%20panel%20for%20NYPADROX%20e-commerce%20platform%22%2C%22start_url%22%3A%22.%22%2C%22scope%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230d2b3e%22%2C%22theme_color%22%3A%22%23039161%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fi.imgur.com%2F57yg1jO.jpg%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fi.imgur.com%2F57yg1jO.jpg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,13 +62,47 @@
         .loading-spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid #e9ecef; border-top: 2px solid #039161; border-radius: 50%; animation: spin 0.7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ========== PWA ========== */
-        #installBtn { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 9998; border-radius: 50px; padding: 0.6rem 2rem; background: #039161; color: #fff; border: none; font-weight: 600; box-shadow: 0 8px 24px rgba(3, 145, 97, 0.4); transition: 0.3s; display: none; }
-        #installBtn:hover { background: #027a51; transform: translateX(-50%) scale(1.03); }
-        #pwaSplash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d2b3e; display: flex; align-items: center; justify-content: center; z-index: 99999; color: #fff; font-size: 2rem; font-weight: 700; transition: opacity 0.6s ease; pointer-events: none; }
+        /* ========== PWA (extracted from index.html — floating pill button) ========== */
+        #installBtn {
+            position: fixed;
+            bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+            right: 14px;
+            height: 42px;
+            padding: 0 18px;
+            border-radius: 21px;
+            background: linear-gradient(135deg, #035191, #0277bd);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 14px rgba(0,0,0,.28);
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 9998;
+            display: none;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+            transition: transform .2s, box-shadow .2s;
+            cursor: pointer;
+        }
+        #installBtn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(3,81,145,.38); }
+        #installBtn:active { transform: translateY(0); }
+        #installBtn.visible { display: inline-flex; }
+
+        #pwaSplash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0d2b3e; display: flex; align-items: center; justify-content: center;
+            z-index: 99999; color: #fff; font-size: 2rem; font-weight: 700;
+            transition: opacity 0.6s ease; pointer-events: none;
+        }
         #pwaSplash.hidden { opacity: 0; }
-        #pwaSplash .loader { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.15); border-top: 4px solid #039161; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 1.2rem; }
+        #pwaSplash .loader { width: 44px; height: 44px; border: 4px solid rgba(255,255,255,0.15); border-top: 4px solid #039161; border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 1rem; }
         #pwaSplash .inner { display: flex; align-items: center; gap: 1rem; }
+        #pwaSplash .splash-logo {
+            width: 56px; height: 56px; border-radius: 14px; object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+            background: #fff;
+        }
+        #pwaSplash .splash-word { letter-spacing: 2px; font-size: 1.6rem; }
 
         /* ========== PRODUCTS & MEDIA ========== */
         .product-thumb { height: 150px; object-fit: cover; border-top-left-radius: 1rem; border-top-right-radius: 1rem; background: #f1f5f9; }
@@ -138,17 +189,20 @@
             position: relative;
             z-index: 1;
         }
+        /* Logo mark now hosts the NyPadrox image */
         .login-brand .brand-mark .mark {
-            width: 44px; height: 44px;
+            width: 46px; height: 46px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #039161, #06b977);
+            overflow: hidden;
+            background: #fff;
             display: grid;
             place-items: center;
-            font-weight: 800;
-            font-size: 1.15rem;
-            letter-spacing: -.5px;
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(3,145,97,0.45);
+            box-shadow: 0 8px 20px rgba(3,145,97,0.45), 0 0 0 2px rgba(255,255,255,0.08);
+        }
+        .login-brand .brand-mark .mark img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
         }
         .login-brand .brand-mark .text {
             font-weight: 700;
@@ -426,25 +480,30 @@
 </head>
 <body>
 
-    <!-- PWA SPLASH -->
+    <!-- PWA SPLASH (now with NyPadrox logo) -->
     <div id="pwaSplash">
         <div class="inner">
+            <img class="splash-logo" src="https://i.imgur.com/57yg1jO.jpg" alt="NYPADROX">
             <div class="loader"></div>
-            <span>NYPADROX</span>
+            <span class="splash-word">NYPADROX</span>
         </div>
     </div>
 
-    <!-- INSTALL BUTTON -->
-    <button id="installBtn"><i class="bi bi-download me-2"></i> Install App</button>
+    <!-- INSTALL BUTTON (extracted from index.html — floating pill) -->
+    <button id="installBtn" aria-label="Install app">
+        <i class="bi bi-download"></i><span>Install App</span>
+    </button>
 
     <!-- ===================== LOGIN OVERLAY ===================== -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-shell">
 
-            <!-- LEFT: branding -->
+            <!-- LEFT: branding (logo mark now uses NyPadrox image) -->
             <aside class="login-brand">
                 <div class="brand-mark">
-                    <div class="mark">NP</div>
+                    <div class="mark">
+                        <img src="https://i.imgur.com/57yg1jO.jpg" alt="NYPADROX">
+                    </div>
                     <div class="text">
                         NYPADROX
                         <small>Admin Console</small>
@@ -469,7 +528,7 @@
                 </div>
             </aside>
 
-            <!-- RIGHT: form -->
+            <!-- RIGHT: form (unchanged) -->
             <main class="login-form-pane">
                 <h2>Welcome back</h2>
                 <p class="subtitle">Sign in to your administrator account to continue.</p>
@@ -527,8 +586,8 @@
                     </div>
 
                     <div class="login-footer">
-                        NYPADROX Admin <span class="dot">·</span> v7.2.2
-                        <span class="dot">·</span> Build 2025.02
+                        NYPADROX Admin <span class="dot">·</span> v8.0.0
+                        <span class="dot">·</span> Build 2025.10
                     </div>
                 </form>
             </main>
@@ -536,11 +595,10 @@
         </div>
     </div>
 
-    <!-- ===================== MAIN APP ===================== -->
+    <!-- ===================== MAIN APP (unchanged) ===================== -->
     <div id="app" style="display:none;">
         <div class="container-fluid">
             <div class="row">
-                <!-- SIDEBAR -->
                 <nav class="col-md-2 col-12 sidebar p-3">
                     <div class="sidebar-brand">NYPADROX <small>Admin Panel</small></div>
                     <ul class="nav nav-pills flex-column flex-nowrap" id="sidebarNav">
@@ -556,7 +614,6 @@
                     </ul>
                 </nav>
 
-                <!-- MAIN CONTENT -->
                 <main class="col-md-10 col-12 main-content">
                     <div id="sectionContent"></div>
                 </main>
@@ -564,7 +621,7 @@
         </div>
     </div>
 
-    <!-- ===================== PRODUCT MODAL ===================== -->
+    <!-- ===================== PRODUCT MODAL (unchanged) ===================== -->
     <div class="modal fade" id="productModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
@@ -698,7 +755,7 @@
         </div>
     </div>
 
-    <!-- ===================== VIDEO MODAL ===================== -->
+    <!-- ===================== VIDEO MODAL (unchanged) ===================== -->
     <div class="modal fade" id="videoModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
@@ -773,40 +830,96 @@
                 setTimeout(() => { if (splash) splash.style.display = 'none'; }, 1200);
             }
 
-            // ---------- SERVICE WORKER ----------
+            // ---------- SERVICE WORKER (extracted from index.html) ----------
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                        .catch(err => console.info('SW registration skipped:', err && err.message));
+                    navigator.serviceWorker.register('sw.js', { scope: './' })
+                        .then(reg => { try { reg.update(); } catch (_) {} })
+                        .catch(err => { console.warn('Service worker registration failed:', err); });
                 });
             }
 
-            // ---------- INSTALL BUTTON ----------
+            // ---------- INSTALL BUTTON (extracted from index.html) ----------
+            // Detects: Android/Chrome (via beforeinstallprompt), iOS Safari,
+            // macOS Safari 17+, and falls back to manual instructions.
             let deferredPrompt = null;
             const installBtn = document.getElementById('installBtn');
+
+            const isStandalone = () => {
+                try {
+                    return (
+                        window.matchMedia('(display-mode: standalone)').matches ||
+                        window.matchMedia('(display-mode: fullscreen)').matches ||
+                        window.matchMedia('(display-mode: minimal-ui)').matches ||
+                        window.navigator.standalone === true
+                    );
+                } catch (_) { return false; }
+            };
+            const isIOS = () => {
+                const ua = navigator.userAgent || '';
+                const iOS = /iPad|iPhone|iPod/.test(ua) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                return iOS && !window.MSStream;
+            };
+            const isSafari = () =>
+                /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent || '');
+
+            function refreshInstall() {
+                if (!installBtn) return;
+                if (isStandalone()) { installBtn.classList.remove('visible'); return; }
+                if (deferredPrompt) { installBtn.classList.add('visible'); return; }
+                if (isIOS()) { installBtn.classList.add('visible'); return; }
+                if (isSafari() && /Mac/.test(navigator.platform)) {
+                    installBtn.classList.add('visible'); return;
+                }
+                installBtn.classList.remove('visible');
+            }
+
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                installBtn.style.display = 'block';
+                refreshInstall();
             });
-            installBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const result = await deferredPrompt.userChoice;
-                    if (result.outcome === 'accepted') {
-                        installBtn.style.display = 'none';
-                        showToast('App installed! 🎉', 'success');
-                    }
-                    deferredPrompt = null;
-                }
-            });
+
             window.addEventListener('appinstalled', () => {
-                installBtn.style.display = 'none';
-                showToast('NYPADROX installed successfully!', 'success');
+                deferredPrompt = null;
+                if (installBtn) installBtn.classList.remove('visible');
+                showToast('NYPADROX Admin installed successfully!', 'success');
             });
+
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        try {
+                            deferredPrompt.prompt();
+                            const choice = await deferredPrompt.userChoice;
+                            if (choice && choice.outcome === 'accepted') {
+                                installBtn.classList.remove('visible');
+                                showToast('App installed! 🎉', 'success');
+                            }
+                        } catch (_) {}
+                        deferredPrompt = null;
+                        refreshInstall();
+                        return;
+                    }
+                    if (isIOS()) {
+                        alert('Install NYPADROX Admin on iPhone / iPad:\n\n1. Tap the Share button (the square with an up-arrow) in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top-right corner\n\nThe NYPADROX Admin icon will then appear on your home screen.');
+                        return;
+                    }
+                    if (isSafari() && /Mac/.test(navigator.platform)) {
+                        alert('Install NYPADROX Admin on macOS Safari:\n\nFile menu → "Add to Dock…"\n\n(If you don\'t see it, update Safari to version 17 or later.)');
+                        return;
+                    }
+                    alert('Install NYPADROX Admin:\n\n• Chrome / Edge: open the browser menu (⋮) → "Install NYPADROX Admin" or "Install app"\n• Firefox (Android): menu → "Install"\n• Samsung Internet: menu → "Add page to" → "Home screen"');
+                });
+                refreshInstall();
+            }
 
             // ---------- GLOBALS ----------
             const API_BASE = (document.querySelector('meta[name="api-base"]')?.content || 'https://akhopwa.onrender.com').replace(/\/$/, '');
+            const API_TIMEOUT = 20000;
+            const UPLOAD_TIMEOUT = 60000;
+            const SSE_RELOAD_DEBOUNCE = 400;
             let token = null;
             let currentSection = 'dashboard';
             let eventSource = null;
@@ -816,8 +929,8 @@
             let dashboardInterval = null;
             let sseReconnectTimer = null;
             let sseReconnectDelay = 1000;
+            let sseReloadTimer = null;
 
-            // Inline SVG placeholder — no external/demo image service.
             const FALLBACK_PRODUCT_IMG = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
                 "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>" +
                 "<rect width='200' height='200' fill='#f1f5f9'/>" +
@@ -838,13 +951,42 @@
                     .replace(/"/g, '&quot;')
                     .replace(/'/g, '&#39;');
             }
-
+            function toLocaleNumber(v) {
+                const n = Number(v);
+                return Number.isFinite(n) ? n.toLocaleString() : '0';
+            }
             function csvField(v) {
                 const s = (v === null || v === undefined) ? '' : String(v);
                 if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
                 return s;
             }
-
+            async function fetchWithTimeout(url, opts = {}, timeoutMs = API_TIMEOUT) {
+                const ctrl = new AbortController();
+                const tid = setTimeout(() => { try { ctrl.abort(); } catch(_){} }, timeoutMs);
+                try {
+                    return await fetch(url, { ...opts, signal: ctrl.signal });
+                } finally {
+                    clearTimeout(tid);
+                }
+            }
+            function forceReLogin(reason) {
+                if (logoutInProgress) return;
+                logoutInProgress = true;
+                if (dashboardInterval) { clearInterval(dashboardInterval); dashboardInterval = null; }
+                if (sseReconnectTimer) { clearTimeout(sseReconnectTimer); sseReconnectTimer = null; }
+                if (sseReloadTimer) { clearTimeout(sseReloadTimer); sseReloadTimer = null; }
+                if (eventSource) { try { eventSource.close(); } catch(_){} eventSource = null; }
+                sessionStorage.removeItem('adminToken');
+                sessionStorage.removeItem('adminUser');
+                token = null;
+                document.getElementById('app').style.display = 'none';
+                loginOverlay.style.display = 'flex';
+                loginOverlay.style.opacity = '';
+                clearLoginError();
+                showLoginError(reason || 'Your session has expired. Please sign in again.');
+                setLoading(false);
+                setTimeout(() => { logoutInProgress = false; loginUsername.focus(); }, 500);
+            }
             function apiRequest(endpoint, options = {}) {
                 if (logoutInProgress) {
                     return Promise.resolve({ success: false, message: 'Logged out' });
@@ -854,20 +996,24 @@
                     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
                     ...(options.headers || {})
                 };
-                return fetch(`${API_BASE}${endpoint}`, { ...options, headers })
+                return fetchWithTimeout(`${API_BASE}${endpoint}`, { ...options, headers })
                     .then(async res => {
                         let body;
                         try { body = await res.json(); }
                         catch (_) { body = { success: false, message: `HTTP ${res.status}` }; }
                         if (res.status === 401 || res.status === 403) {
-                            sessionStorage.removeItem('adminToken');
-                            token = null;
-                            if (eventSource) { try { eventSource.close(); } catch(_){} eventSource = null; }
+                            forceReLogin('Your session has expired. Please sign in again.');
                         }
                         return body;
+                    })
+                    .catch(err => {
+                        if (err && err.name === 'AbortError') {
+                            showToast('Request timed out. Please retry.', 'danger');
+                            return { success: false, message: 'Request timed out' };
+                        }
+                        return { success: false, message: err.message || 'Network error' };
                     });
             }
-
             function showToast(message, type = 'success') {
                 const container = document.querySelector('.toast-container');
                 const bg = type === 'success' ? 'bg-success' : type === 'danger' ? 'bg-danger' : 'bg-info';
@@ -885,7 +1031,6 @@
                     setTimeout(() => el.remove(), 400);
                 }, 4000);
             }
-
             function renderSpinner() { return '<span class="loading-spinner"></span>'; }
 
             // ========== LOGIN ==========
@@ -931,7 +1076,6 @@
                 loginErrorBox.classList.remove('show', 'shake');
                 loginErrorText.textContent = '';
             }
-
             function setLoading(on) {
                 signInBtn.disabled = on;
                 signInSpinner.classList.toggle('d-none', !on);
@@ -963,11 +1107,11 @@
 
                 setLoading(true);
                 try {
-                    const res = await fetch(`${API_BASE}/api/login`, {
+                    const res = await fetchWithTimeout(`${API_BASE}/api/login`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ username, password })
-                    });
+                    }, API_TIMEOUT);
 
                     let data;
                     try { data = await res.json(); }
@@ -1009,7 +1153,11 @@
                         initApp();
                     }, 320);
                 } catch (err) {
-                    showLoginError('Network error. Please check your connection and try again.');
+                    if (err && err.name === 'AbortError') {
+                        showLoginError('Sign-in timed out. Please check your connection and retry.');
+                    } else {
+                        showLoginError('Network error. Please check your connection and try again.');
+                    }
                     setLoading(false);
                 }
             });
@@ -1030,18 +1178,22 @@
                             document.getElementById('app').style.display = 'block';
                             initApp();
                         } else {
-                            sessionStorage.removeItem('adminToken');
-                            token = null;
-                            loginOverlay.style.display = 'flex';
-                            showLoginError('Your previous session has expired. Please sign in again.');
-                            setTimeout(() => loginUsername.focus(), 250);
+                            if (!logoutInProgress) {
+                                sessionStorage.removeItem('adminToken');
+                                token = null;
+                                loginOverlay.style.display = 'flex';
+                                showLoginError('Your previous session has expired. Please sign in again.');
+                                setTimeout(() => loginUsername.focus(), 250);
+                            }
                         }
                     })
                     .catch(() => {
-                        sessionStorage.removeItem('adminToken');
-                        token = null;
-                        loginOverlay.style.display = 'flex';
-                        setTimeout(() => loginUsername.focus(), 250);
+                        if (!logoutInProgress) {
+                            sessionStorage.removeItem('adminToken');
+                            token = null;
+                            loginOverlay.style.display = 'flex';
+                            setTimeout(() => loginUsername.focus(), 250);
+                        }
                     });
             }
 
@@ -1052,6 +1204,7 @@
                 logoutInProgress = true;
                 if (dashboardInterval) { clearInterval(dashboardInterval); dashboardInterval = null; }
                 if (sseReconnectTimer) { clearTimeout(sseReconnectTimer); sseReconnectTimer = null; }
+                if (sseReloadTimer) { clearTimeout(sseReloadTimer); sseReloadTimer = null; }
                 if (eventSource) { try { eventSource.close(); } catch(_){} eventSource = null; }
 
                 sessionStorage.removeItem('adminToken');
@@ -1083,6 +1236,7 @@
             });
 
             function loadSection(section) {
+                if (logoutInProgress) return;
                 const container = document.getElementById('sectionContent');
                 container.innerHTML = `<div class="text-center py-5">${renderSpinner()} Loading...</div>`;
                 switch (section) {
@@ -1102,7 +1256,7 @@
             async function loadDashboard(container) {
                 try {
                     const [usersRes, ordersRes, productsRes, videosRes] = await Promise.all([
-                        apiRequest('/api/admin/users'),
+                        apiRequest('/api/admin/users?limit=200'),
                         apiRequest('/api/orders'),
                         apiRequest('/api/products'),
                         apiRequest('/api/videos')
@@ -1123,7 +1277,7 @@
                         </div>
                         <div class="card mt-4 p-3">
                             <h5 class="mb-3"><i class="bi bi-clock-history"></i> Recent Orders</h5>
-                            ${recent.length ? `<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Order</th><th>Product</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>${recent.map(o => `<tr><td>#${escapeHtml(o.id)}</td><td>${escapeHtml(o.product_name)}</td><td>MK ${escapeHtml(o.total_mwk)}</td><td><span class="badge bg-${o.status === 'pending' ? 'warning' : o.status === 'delivered' ? 'success' : 'secondary'}">${escapeHtml(o.status)}</span></td><td>${new Date(o.order_date).toLocaleDateString()}</td></tr>`).join('')}</tbody></table></div>` : '<p class="text-secondary">No orders yet.</p>'}
+                            ${recent.length ? `<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Order</th><th>Product</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>${recent.map(o => `<tr><td>#${escapeHtml(o.id)}</td><td>${escapeHtml(o.product_name)}</td><td>MK ${toLocaleNumber(o.total_mwk)}</td><td><span class="badge bg-${o.status === 'pending' ? 'warning' : o.status === 'delivered' ? 'success' : 'secondary'}">${escapeHtml(o.status)}</span></td><td>${new Date(o.order_date).toLocaleDateString()}</td></tr>`).join('')}</tbody></table></div>` : '<p class="text-secondary">No orders yet.</p>'}
                         </div>`;
                 } catch (err) {
                     container.innerHTML = `<div class="alert alert-danger">Error loading dashboard: ${escapeHtml(err.message)}</div>`;
@@ -1157,7 +1311,7 @@
                                             <td>#${escapeHtml(o.id)}</td>
                                             <td>${escapeHtml(o.product_name)}</td>
                                             <td>${escapeHtml(o.quantity)}</td>
-                                            <td>MK ${escapeHtml(o.total_mwk)}</td>
+                                            <td>MK ${toLocaleNumber(o.total_mwk)}</td>
                                             <td>${escapeHtml(o.phone || '-')}</td>
                                             <td>${escapeHtml(o.email || '-')}</td>
                                             <td><span class="badge bg-${o.status === 'pending' ? 'warning' : o.status === 'processing' ? 'info' : o.status === 'shipped' ? 'primary' : o.status === 'delivered' ? 'success' : 'secondary'} status-badge">${escapeHtml(o.status)}</span></td>
@@ -1289,11 +1443,11 @@
             // ---------- USERS ----------
             async function loadUsers(container) {
                 try {
-                    const data = await apiRequest('/api/admin/users');
+                    const data = await apiRequest('/api/admin/users?limit=200');
                     if (logoutInProgress) return;
                     const users = data.users || [];
                     container.innerHTML = `
-                        <h4><i class="bi bi-people"></i> Users</h4>
+                        <h4><i class="bi bi-people"></i> Users <span class="text-secondary fw-normal">(${data.total || users.length})</span></h4>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead><tr><th>Username</th><th>Email</th><th>Full Name</th><th>Admin</th><th>Active</th><th>Verified</th><th>ID</th></tr></thead>
@@ -1359,7 +1513,7 @@
                                         <div class="card-body p-2 d-flex flex-column">
                                             <h6 class="card-title mb-1">${escapeHtml(p.emoji || '')} ${escapeHtml(p.name)}</h6>
                                             <small class="text-secondary mb-1">${escapeHtml(p.category || '')}</small>
-                                            <p class="card-text small mb-1">MK ${escapeHtml((p.price_mwk||0).toLocaleString())} · $${escapeHtml(p.price_usd||0)}</p>
+                                            <p class="card-text small mb-1">MK ${toLocaleNumber(p.price_mwk)} · $${escapeHtml(p.price_usd||0)}</p>
                                             <div class="mb-2">
                                                 <span class="badge ${p.stock > 0 ? 'bg-success' : 'bg-danger'}">${p.stock > 0 ? `Stock: ${escapeHtml(p.stock)}` : 'Out of stock'}</span>
                                             </div>
@@ -1445,13 +1599,11 @@
                     hidden.value = '';
                 }
             }
-
             function _setUploadError(msg) {
                 const box = document.getElementById('pf_image_error');
                 if (msg) { box.textContent = msg; box.style.display = 'block'; }
                 else { box.textContent = ''; box.style.display = 'none'; }
             }
-
             function _setUploadProgress(pct) {
                 const wrap = document.getElementById('pf_image_progress');
                 if (!wrap) return;
@@ -1463,7 +1615,6 @@
 
             async function compressImage(file) {
                 if (file.type === 'image/gif') return file;
-
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onerror = () => reject(new Error('Could not read file'));
@@ -1522,18 +1673,26 @@
 
                     const result = await new Promise((resolve, reject) => {
                         const xhr = new XMLHttpRequest();
+                        let timedOut = false;
                         xhr.open('POST', `${API_BASE}/api/admin/upload-image`, true);
                         if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        xhr.timeout = UPLOAD_TIMEOUT;
                         xhr.upload.onprogress = (ev) => {
                             if (ev.lengthComputable) {
                                 const pct = 20 + Math.round((ev.loaded / ev.total) * 75);
                                 _setUploadProgress(pct);
                             }
                         };
+                        xhr.ontimeout = () => { timedOut = true; reject(new Error('Upload timed out')); };
                         xhr.onerror = () => reject(new Error('Network error during upload'));
+                        xhr.onabort = () => { if (!timedOut) reject(new Error('Upload cancelled')); };
                         xhr.onload = () => {
                             try {
                                 const data = JSON.parse(xhr.responseText || '{}');
+                                if (xhr.status === 401 || xhr.status === 403) {
+                                    forceReLogin('Your session expired. Please sign in again.');
+                                    return reject(new Error('Session expired'));
+                                }
                                 if (xhr.status >= 200 && xhr.status < 300 && data.success) return resolve(data);
                                 reject(new Error(data.message || `Upload failed (HTTP ${xhr.status})`));
                             } catch (_) { reject(new Error('Malformed response from server')); }
@@ -1780,7 +1939,6 @@
 
             // ---------- CONVERSATIONS ----------
             function renderConversationUser(l) {
-                // Prefer the real name (full_name) from the users table; fall back to username.
                 if (l.full_name && String(l.full_name).trim()) {
                     const handle = l.username ? `<div class="conv-handle">@${escapeHtml(l.username)}</div>` : '';
                     return `<div class="conv-user-cell"><div class="conv-name">${escapeHtml(l.full_name)}</div>${handle}</div>`;
@@ -1953,7 +2111,18 @@
                 }
             }
 
-            // ---------- SSE ----------
+            // ---------- SSE (with jitter + debounced reloads) ----------
+            function scheduleReloadFromSSE() {
+                if (sseReloadTimer) clearTimeout(sseReloadTimer);
+                sseReloadTimer = setTimeout(() => {
+                    sseReloadTimer = null;
+                    if (logoutInProgress) return;
+                    if (['orders','videos','dashboard','products','conversations'].includes(currentSection)) {
+                        loadSection(currentSection);
+                    }
+                }, SSE_RELOAD_DEBOUNCE);
+            }
+
             function initSSE() {
                 if (sseReconnectTimer) { clearTimeout(sseReconnectTimer); sseReconnectTimer = null; }
                 if (eventSource) { try { eventSource.close(); } catch(_){} eventSource = null; }
@@ -1974,26 +2143,39 @@
                                 'orders_deleted', 'conversations_deleted'
                             ];
                             if (refreshEvents.includes(data.type)) {
-                                if (['orders','videos','dashboard','products','conversations'].includes(currentSection)) {
-                                    loadSection(currentSection);
-                                }
+                                scheduleReloadFromSSE();
                             }
                         } catch (_) {}
                     };
                     eventSource.onerror = () => {
-                        if (eventSource && eventSource.readyState === EventSource.CLOSED) {
-                            return;
-                        }
+                        if (eventSource && eventSource.readyState === EventSource.CLOSED) return;
                         try { eventSource.close(); } catch(_){}
                         eventSource = null;
                         if (!token || logoutInProgress) return;
-                        sseReconnectTimer = setTimeout(() => {
-                            sseReconnectDelay = Math.min(sseReconnectDelay * 2, 30000);
-                            initSSE();
-                        }, sseReconnectDelay);
+                        const jitter = Math.random() * 1000;
+                        const delay = Math.min(sseReconnectDelay, 30000) + jitter;
+                        sseReconnectDelay = Math.min(sseReconnectDelay * 2, 30000);
+                        sseReconnectTimer = setTimeout(() => initSSE(), delay);
                     };
                 } catch (_) {}
             }
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    if (dashboardInterval) { clearInterval(dashboardInterval); dashboardInterval = null; }
+                } else {
+                    if (!logoutInProgress && token) {
+                        if (!dashboardInterval) {
+                            dashboardInterval = setInterval(() => {
+                                if (currentSection === 'dashboard' && !logoutInProgress && !document.hidden) {
+                                    loadSection('dashboard');
+                                }
+                            }, 30000);
+                        }
+                        if (currentSection === 'dashboard') loadSection('dashboard');
+                    }
+                }
+            });
 
             // ---------- INIT ----------
             function initApp() {
@@ -2001,7 +2183,9 @@
                 initSSE();
                 if (dashboardInterval) clearInterval(dashboardInterval);
                 dashboardInterval = setInterval(() => {
-                    if (currentSection === 'dashboard' && !logoutInProgress) loadSection('dashboard');
+                    if (currentSection === 'dashboard' && !logoutInProgress && !document.hidden) {
+                        loadSection('dashboard');
+                    }
                 }, 30000);
             }
 
