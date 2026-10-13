@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes,viewport-fit=cover">
 <meta name="theme-color" content="#039161">
-<meta name="description" content="NyPadrox Online Marketplace — shop quality products across Malawi with mobile money & cash on delivery.">
+<meta name="description" content="NyPadrox Online Marketplace — shop quality products across Malawi with mobile money and cash on delivery.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -65,11 +65,13 @@ input{font-family:inherit}
   border-top-color:#035191;
 }
 #authBtn .btn-spinner,
-#googleBtn .btn-spinner{
+#googleBtn .btn-spinner,
+#setPwBtn .btn-spinner{
   margin-right:8px;
 }
 #authBtn.loading,
-#googleBtn.loading{
+#googleBtn.loading,
+#setPwBtn.loading{
   pointer-events:none;
   opacity:.92;
 }
@@ -209,48 +211,171 @@ input{font-family:inherit}
                           font-weight:700;min-width:16px;height:16px;padding:0 4px;border-radius:8px;
                           display:flex;align-items:center;justify-content:center;border:2px solid #fff}
 
+/* ============ MODERN AUTH ============ */
 .login-box{
-    width: 92%;max-width: 420px;padding: 40px 30px 30px 30px;background: var(--card-bg);
-    border-radius: 24px;box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
-    text-align: center;animation: slideIn .5s ease;position: fixed;top: 50%;left: 50%;
-    transform: translate(-50%, -50%);z-index: 600;border: 1px solid rgba(0,0,0,0.02);
+  width:94%;max-width:470px;padding:34px 32px 26px;background:var(--card-bg);
+  border-radius:24px;
+  box-shadow:0 24px 60px rgba(15,23,42,.16), 0 2px 6px rgba(15,23,42,.05);
+  text-align:center;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:600;border:1px solid rgba(15,23,42,.05);
+  max-height:94vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  animation:slideIn .45s cubic-bezier(.2,.8,.2,1);
 }
 @keyframes slideIn{
-    from{transform:translate(-50%,-50%) translateY(30px);opacity:0}
-    to{transform:translate(-50%,-50%) translateY(0);opacity:1}
+  from{transform:translate(-50%,-50%) translateY(24px);opacity:0}
+  to{transform:translate(-50%,-50%) translateY(0);opacity:1}
 }
-.login-logo {width: 100%;height: 120px;margin: 0 auto 25px auto;display: flex;align-items: center;justify-content: center;}
-.login-logo img {max-width: 100%;max-height: 100%;object-fit: contain;border-radius: 12px;}
-.login-box h2{color: #0f172a;font-weight: 700;letter-spacing: -0.5px;margin-bottom: 30px;font-size: 26px;}
-.login-box input{width: 100%;padding: 16px 18px;margin: 8px 0;border-radius: 14px;border: 1.5px solid #e2e8f0;
-    background: #f8fafc;color: #1e293b;font-size: 15px;transition: all 0.3s ease;}
-.login-box input:focus{outline: none;border-color: var(--brand-blue);background: #ffffff;box-shadow: 0 0 0 4px rgba(3,81,145,0.08);}
-.login-box input::placeholder {color: #94a3b8;}
-.login-box #authBtn{width: 100%;padding: 16px;margin-top: 10px;
-    background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-2));
-    border: none;border-radius: 14px;color: #fff;font-weight: 600;font-size: 16px;
-    display:flex;align-items:center;justify-content:center;gap:6px;
-    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;}
-.login-box #authBtn:hover{transform: translateY(-2px);box-shadow: 0 8px 20px rgba(3,81,145,0.25);}
-.login-box #authBtn:active{transform: translateY(0);}
-.login-box .switch{margin-top: 16px;font-size: 14px;color: #64748b;cursor: pointer;font-weight: 500;transition: color 0.2s;}
-.login-box .switch:hover{color: var(--brand-blue);}
-.pw-wrap {position: relative;width: 100%;}
-.pw-wrap input {padding-right: 50px;}
-.pw-toggle {position: absolute;right: 18px;top: 50%;transform: translateY(-50%);cursor: pointer;font-size: 16px;color: #94a3b8;user-select: none;}
-.divider {display: flex;align-items: center;text-align: center;margin: 24px 0;color: #94a3b8;font-size: 13px;font-weight: 500;}
-.divider::before, .divider::after {content: '';flex: 1;border-bottom: 1px solid #e2e8f0;}
-.divider:not(:empty)::before { margin-right: 12px; }
-.divider:not(:empty)::after { margin-left: 12px; }
-.google-btn{background: #ffffff;border: 1.5px solid #e2e8f0;border-radius: 14px;padding: 14px 18px;color: #374151;
-    display: flex;align-items: center;justify-content: center;gap: 10px;font-weight: 500;font-size: 15px;
-    font-family: Inter, Arial, sans-serif;box-shadow: 0 1px 2px rgba(0,0,0,0.02);transition: all 0.2s;width: 100%;white-space: nowrap;}
-.google-btn:hover{background: #f8fafc;border-color: #cbd5e1;box-shadow: 0 4px 12px rgba(0,0,0,0.05);}
-.google-btn span{color: #374151;}
-.google-btn svg{flex-shrink: 0;}
-#regFields {display: flex;flex-direction: column;gap: 8px;}
-#regFields > div {display: grid;grid-template-columns: 1fr 1fr;gap: 10px;width: 100%;}
-#regFields > div input {margin: 0;}
+.login-logo{
+  width:100%;height:92px;margin:0 auto 20px;
+  display:flex;align-items:center;justify-content:center;
+}
+.login-logo img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;}
+
+.auth-tabs{
+  position:relative;display:grid;grid-template-columns:1fr 1fr;
+  background:#f1f5f9;border-radius:12px;padding:4px;margin-bottom:20px;
+}
+.auth-tab{
+  position:relative;z-index:2;background:transparent;border:none;
+  padding:11px 10px;font-size:14px;font-weight:600;color:#64748b;
+  border-radius:9px;transition:color .25s ease;font-family:inherit;
+}
+.auth-tab.active{color:#0f172a;}
+.auth-tab-indicator{
+  position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);
+  background:#fff;border-radius:9px;
+  box-shadow:0 1px 3px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:1;
+}
+.auth-tab-indicator.right{transform:translateX(100%);}
+
+.auth-alert{
+  padding:11px 14px;border-radius:10px;font-size:13px;text-align:left;
+  margin-bottom:14px;line-height:1.4;
+}
+.auth-alert.err{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+.auth-alert.ok {background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;}
+
+.auth-form{display:flex;flex-direction:column;gap:14px;text-align:left;}
+.auth-name-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.auth-field{display:flex;flex-direction:column;gap:6px;}
+.auth-field label{
+  font-size:12.5px;font-weight:600;color:#334155;letter-spacing:.1px;
+}
+.auth-input-wrap{
+  position:relative;display:flex;align-items:center;
+  background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.auth-input-wrap:focus-within{
+  border-color:var(--brand-blue);background:#fff;
+  box-shadow:0 0 0 4px rgba(3,81,145,.08);
+}
+.auth-icon{
+  width:44px;text-align:center;color:#94a3b8;font-size:14px;
+  transition:color .2s;flex-shrink:0;
+}
+.auth-input-wrap:focus-within .auth-icon{color:var(--brand-blue);}
+.auth-input-wrap input{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;
+  padding:13px 12px 13px 0;font-size:14.5px;color:var(--text);font-family:inherit;
+}
+.auth-input-wrap input::placeholder{color:#cbd5e1;}
+.auth-eye{
+  background:none;border:none;padding:0 14px;color:#94a3b8;
+  font-size:14px;cursor:pointer;transition:color .2s;flex-shrink:0;
+}
+.auth-eye:hover{color:var(--brand-blue);}
+.auth-hint{font-size:11.5px;color:#94a3b8;line-height:1.4;padding-left:2px;}
+
+.auth-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-top:-2px;
+}
+.auth-check{
+  display:flex;align-items:center;gap:7px;font-size:12.5px;
+  color:#475569;cursor:pointer;user-select:none;
+}
+.auth-check input{
+  appearance:none;-webkit-appearance:none;width:16px;height:16px;
+  border:1.5px solid #cbd5e1;border-radius:5px;background:#fff;cursor:pointer;
+  position:relative;transition:background .15s,border-color .15s;margin:0;
+}
+.auth-check input:checked{background:var(--brand-blue);border-color:var(--brand-blue);}
+.auth-check input:checked::after{
+  content:"";position:absolute;left:4.5px;top:1px;width:4px;height:8px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.auth-link{
+  font-size:12.5px;color:var(--brand-blue);font-weight:600;text-decoration:none;
+}
+.auth-link:hover{text-decoration:underline;}
+
+.auth-submit{
+  position:relative;width:100%;padding:14px;margin-top:4px;
+  background:linear-gradient(135deg,var(--brand-blue),var(--brand-blue-2));
+  color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;
+  letter-spacing:.2px;display:flex;align-items:center;justify-content:center;
+  gap:8px;transition:transform .15s,box-shadow .2s,opacity .2s;
+  box-shadow:0 6px 16px rgba(3,81,145,.22);cursor:pointer;font-family:inherit;
+}
+.auth-submit:hover:not(:disabled){
+  transform:translateY(-1px);box-shadow:0 10px 22px rgba(3,81,145,.3);
+}
+.auth-submit:active:not(:disabled){transform:translateY(0);}
+.auth-submit:disabled{opacity:.85;cursor:not-allowed;transform:none;}
+.auth-submit.loading .auth-submit-label{visibility:hidden;}
+.auth-submit.loading::after{
+  content:"";position:absolute;top:50%;left:50%;width:20px;height:20px;
+  margin:-10px 0 0 -10px;border:2.5px solid rgba(255,255,255,.35);
+  border-top-color:#fff;border-radius:50%;animation:spinCCW .65s linear infinite;
+}
+
+.pw-strength{display:flex;flex-direction:column;gap:5px;padding:4px 2px 0;}
+.pw-bar{height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden;}
+.pw-bar span{
+  display:block;height:100%;width:0;background:#ef4444;border-radius:2px;
+  transition:width .3s ease,background .3s ease;
+}
+.pw-bar.weak   span{width:33%;background:#ef4444;}
+.pw-bar.medium span{width:66%;background:#f59e0b;}
+.pw-bar.strong span{width:100%;background:#22c55e;}
+.pw-strength small{font-size:11.5px;color:#94a3b8;}
+
+.auth-divider{
+  display:flex;align-items:center;text-align:center;
+  margin:20px 0 14px;color:#94a3b8;font-size:12px;font-weight:500;
+}
+.auth-divider::before,.auth-divider::after{
+  content:'';flex:1;border-bottom:1px solid #e2e8f0;
+}
+.auth-divider::before{margin-right:12px;}
+.auth-divider::after {margin-left:12px;}
+
+.google-btn{
+  background:#ffffff;border:1.5px solid #e2e8f0;border-radius:14px;
+  padding:14px 18px;color:#374151;display:flex;align-items:center;
+  justify-content:center;gap:10px;font-weight:600;font-size:15px;
+  font-family:Inter,Arial,sans-serif;box-shadow:0 1px 2px rgba(0,0,0,.02);
+  transition:all .2s;width:100%;white-space:nowrap;cursor:pointer;
+}
+.google-btn:hover{background:#f8fafc;border-color:#cbd5e1;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+.google-btn span{color:#374151;}
+.google-btn svg{flex-shrink:0;}
+
+.auth-footer{margin-top:14px;text-align:center;}
+.auth-ghost{
+  background:none;border:none;color:#64748b;font-size:12.5px;
+  font-weight:500;cursor:pointer;padding:6px;font-family:inherit;
+}
+.auth-ghost:hover{color:var(--brand-blue);}
+
+@media (max-width:480px){
+  .login-box{width:95%;padding:26px 20px 20px;border-radius:20px;}
+  .login-logo{height:80px;margin-bottom:14px;}
+  .auth-name-row{grid-template-columns:1fr;}
+  .auth-tabs{margin-bottom:16px;}
+}
 
 #chatPage{position:fixed;inset:0;z-index:550;background:#f0f2f5;display:flex;flex-direction:column;
           padding-top:var(--safe-top);padding-bottom:var(--safe-bottom); width: 100%; overflow-x: hidden;}
@@ -469,7 +594,7 @@ input{font-family:inherit}
 .mm-panel .provider-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
 .mm-panel .prov-btn{padding:14px 10px;border:2px solid #e2e8f0;border-radius:14px;background:var(--card-bg);
                     display:flex;flex-direction:column;align-items:center;gap:3px}
-.mm-panel .prov-btn .p-icon{font-size:26px}
+.mm-panel .prov-btn .p-icon{font-size:22px;color:#035191}
 .mm-panel .prov-btn .p-name{font-size:13px;font-weight:700}
 .mm-panel .prov-btn.airtel{border-color:#E3120B}
 .mm-panel .prov-btn.airtel .p-name{color:#E3120B}
@@ -595,14 +720,14 @@ input{font-family:inherit}
     <div class="home-hero">
       <div class="hero-info-anim">
         <h3>Shop Smarter. Delivered Faster.</h3>
-        <p>Do not use mobile money Now  & use  cash on delivery instead.Chonde pelekani ndalama pa manja katundu wathu akafika.</p>
+        <p>Cash on delivery available nationwide. Chonde pelekani ndalama pa manja katundu wathu akafika.</p>
       </div>
       <button class="home-hero-cta" id="heroCta">Start Shopping</button>
     </div>
 
     <div class="home-tiles">
       <div class="home-tile"><div class="t-icon"><i class="fas fa-truck"></i></div><div class="t-title">Fast Delivery</div><div class="t-sub">Nationwide</div></div>
-      <div class="home-tile"><div class="t-icon"><i class="fas fa-credit-card"></i></div><div class="t-title">Mobile Money</div><div class="t-sub">Airtel &amp; TNM</div></div>
+      <div class="home-tile"><div class="t-icon"><i class="fas fa-credit-card"></i></div><div class="t-title">Mobile Money</div><div class="t-sub">Airtel and TNM</div></div>
       <div class="home-tile"><div class="t-icon"><i class="fas fa-shield-alt"></i></div><div class="t-title">Secure</div><div class="t-sub">Trusted</div></div>
     </div>
 
@@ -721,6 +846,7 @@ input{font-family:inherit}
 
 <div class="acc-bubble" id="accBubble">
   <button class="acc-item" id="accHome"><span class="acc-ic"><i class="fas fa-home"></i></span><span>Back to Home</span></button>
+  <button class="acc-item" id="accSetPw"><span class="acc-ic"><i class="fas fa-key"></i></span><span>Set Password</span></button>
   <button class="acc-item logout" id="accLogout"><span class="acc-ic"><i class="fas fa-sign-out-alt"></i></span><span>Logout</span></button>
 </div>
 
@@ -748,39 +874,115 @@ input{font-family:inherit}
   <div class="login-logo">
     <img src="logo.png" alt="NyPadrox Logo">
   </div>
-  <h2 id="formTitle">Login</h2>
-  <div id="loginErr" style="color:#d31a05;margin-bottom:10px;display:none"></div>
-  <div id="loginOk" style="color:#2ecc71;margin-bottom:10px;display:none"></div>
-  
-  <div id="loginFields">
-    <input type="text" id="username" placeholder="Username" autocomplete="username">
-    <div class="pw-wrap">
-      <input type="password" id="password" placeholder="Password" autocomplete="current-password">
-      <span class="pw-toggle" id="togglePw">👁️</span>
-    </div>
+
+  <div class="auth-tabs" role="tablist" aria-label="Sign in or create account">
+    <button type="button" class="auth-tab active" data-tab="login" id="tabLogin" role="tab" aria-selected="true">Sign In</button>
+    <button type="button" class="auth-tab" data-tab="register" id="tabRegister" role="tab" aria-selected="false">Create Account</button>
+    <span class="auth-tab-indicator" id="tabIndicator"></span>
   </div>
 
-  <div id="regFields" style="display:none">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <input type="text" id="firstName" placeholder="First name">
-      <input type="text" id="lastName" placeholder="Last name">
-    </div>
-    <input type="email" id="email" placeholder="Email">
-    <div class="pw-wrap">
-      <input type="password" id="regPassword" placeholder="Password">
-      <span class="pw-toggle" id="toggleRp">👁️</span>
-    </div>
-    <div class="pw-wrap">
-      <input type="password" id="confirmPassword" placeholder="Confirm password">
-      <span class="pw-toggle" id="toggleCp">👁️</span>
-    </div>
-    <div style="font-size:12px;color:#64748b;margin:5px 0;text-align:left;">Min 8 chars, upper, lower, number, special</div>
-  </div>
+  <div id="loginErr" class="auth-alert err" style="display:none"></div>
+  <div id="loginOk"  class="auth-alert ok"  style="display:none"></div>
 
-  <button id="authBtn">Login</button>
-  <div class="divider">Or</div>
+  <form id="loginForm" class="auth-form" autocomplete="on" novalidate>
+    <div class="auth-field">
+      <label for="loginEmail">Email or username</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-user auth-icon" id="loginIdIcon"></i>
+        <input type="text" id="loginEmail" name="identifier"
+               placeholder="you@example.com or your_username"
+               autocomplete="username" autocapitalize="none"
+               autocorrect="off" spellcheck="false" inputmode="text">
+      </div>
+      <small class="auth-hint">Sign in with either your full email address or your username.</small>
+    </div>
 
-  <button id="googleBtn" class="google-btn">
+    <div class="auth-field">
+      <label for="password">Password</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-lock auth-icon"></i>
+        <input type="password" id="password" name="password" placeholder="Enter your password"
+               autocomplete="current-password">
+        <button type="button" class="auth-eye" id="togglePw" aria-label="Show password">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="auth-row">
+      <label class="auth-check"><input type="checkbox" id="rememberMe"><span>Remember me</span></label>
+      <a href="#" id="forgotLink" class="auth-link">Forgot password?</a>
+    </div>
+
+    <button type="submit" class="auth-submit" id="authBtn">
+      <span class="auth-submit-label">Sign In</span>
+    </button>
+  </form>
+
+  <form id="registerForm" class="auth-form hidden" autocomplete="on" novalidate>
+    <div class="auth-name-row">
+      <div class="auth-field">
+        <label for="firstName">First name</label>
+        <div class="auth-input-wrap">
+          <i class="fas fa-user auth-icon"></i>
+          <input type="text" id="firstName" placeholder="First name" autocomplete="given-name">
+        </div>
+      </div>
+      <div class="auth-field">
+        <label for="lastName">Last name</label>
+        <div class="auth-input-wrap">
+          <i class="fas fa-user auth-icon"></i>
+          <input type="text" id="lastName" placeholder="Last name" autocomplete="family-name">
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-field">
+      <label for="regEmail">Email address</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-envelope auth-icon"></i>
+        <input type="email" id="regEmail" placeholder="you@example.com"
+               autocomplete="email" inputmode="email" spellcheck="false">
+      </div>
+      <small class="auth-hint">We will use this to sign you in and send order updates.</small>
+    </div>
+
+    <div class="auth-field">
+      <label for="regPassword">Password</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-lock auth-icon"></i>
+        <input type="password" id="regPassword" placeholder="Create a strong password"
+               autocomplete="new-password">
+        <button type="button" class="auth-eye" id="toggleRp" aria-label="Show password">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <div class="pw-strength" id="pwStrength">
+        <div class="pw-bar"><span></span></div>
+        <small id="pwStrengthText">At least 8 chars, with upper, lower, number and symbol</small>
+      </div>
+    </div>
+
+    <div class="auth-field">
+      <label for="confirmPassword">Confirm password</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-lock auth-icon"></i>
+        <input type="password" id="confirmPassword" placeholder="Re-enter your password"
+               autocomplete="new-password">
+        <button type="button" class="auth-eye" id="toggleCp" aria-label="Show password">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <button type="submit" class="auth-submit" id="regBtn">
+      <span class="auth-submit-label">Create Account</span>
+    </button>
+  </form>
+
+  <div class="auth-divider"><span>or continue with</span></div>
+
+  <button type="button" id="googleBtn" class="google-btn">
     <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
       <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
       <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
@@ -790,10 +992,48 @@ input{font-family:inherit}
     <span>Continue with Google</span>
   </button>
 
-  <div style="margin-top:20px; display:flex; flex-direction:column; gap:8px;">
-    <div class="switch" id="switchMode" style="margin-top:0;">Don't have an account? Create Account</div>
-    <a href="#" id="forgotLink" style="font-size:14px;color:var(--brand-blue);text-decoration:none;font-weight:600;">Forgot password?</a>
-    <div class="switch" id="backHome" style="color:#64748b; margin-top:0;">← Continue browsing as guest</div>
+  <div class="auth-footer">
+    <button type="button" class="auth-ghost" id="backHome">Continue browsing as guest</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="setPwModal">
+  <div class="modal-panel" style="max-width:440px">
+    <button class="modal-close" onclick="closeSetPw()">&times;</button>
+    <h2 style="text-align:center;color:#039161;margin-bottom:10px">Set Your Password</h2>
+    <p style="color:#6b7280;text-align:center;font-size:13px;margin-bottom:16px">
+      Set a password so you can also sign in with your email address.
+      If you signed up with Google, leave the current password blank.
+    </p>
+
+    <div id="setPwErr" class="auth-alert err" style="display:none"></div>
+    <div id="setPwOk"  class="auth-alert ok"  style="display:none"></div>
+
+    <div class="auth-field" style="margin-bottom:10px">
+      <label for="setPwCurrent">Current password (optional)</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-lock auth-icon"></i>
+        <input type="password" id="setPwCurrent" placeholder="Leave blank if you used Google">
+      </div>
+    </div>
+
+    <div class="auth-field" style="margin-bottom:10px">
+      <label for="setPwNew">New password</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-key auth-icon"></i>
+        <input type="password" id="setPwNew" placeholder="8+ chars, upper, lower, number, symbol">
+      </div>
+    </div>
+
+    <div class="auth-field" style="margin-bottom:16px">
+      <label for="setPwConfirm">Confirm new password</label>
+      <div class="auth-input-wrap">
+        <i class="fas fa-key auth-icon"></i>
+        <input type="password" id="setPwConfirm" placeholder="Re-enter new password">
+      </div>
+    </div>
+
+    <button class="auth-submit" id="setPwBtn"><span class="auth-submit-label">Save Password</span></button>
   </div>
 </div>
 
@@ -887,10 +1127,10 @@ input{font-family:inherit}
     <div class="status" id="mmStatus"></div>
     <div class="provider-grid">
       <button class="prov-btn airtel" data-prov="airtel" onclick="pickProv('airtel')">
-        <span class="p-icon">📱</span><span class="p-name">Airtel Money</span>
+        <span class="p-icon"><i class="fas fa-mobile-alt"></i></span><span class="p-name">Airtel Money</span>
       </button>
       <button class="prov-btn tnm" data-prov="tnm" onclick="pickProv('tnm')">
-        <span class="p-icon">📱</span><span class="p-name">TNM Mpamba</span>
+        <span class="p-icon"><i class="fas fa-mobile-alt"></i></span><span class="p-name">TNM Mpamba</span>
       </button>
     </div>
     <div class="instructions" id="instrAirtel">
@@ -928,19 +1168,18 @@ let currentCart=[],currentOrderStep=0,orderData={};
 let waitingForQty=false,waitingForCheckout=false,currentProductKey=null;
 let homeActiveCategory='All',homeSearchQuery='';
 let pendingOrderKey=null,pendingCartCheckout=false;
-let loginMode=true;
 let resetEmail='',tempToken='';
 let isRecording=false,speakerOn=false,recognition=null;
 let selectedProv=null,pendingPayData=null,isProcessingPay=false;
 let eventSource=null,sseRetries=0;
 
 /* ============================================================
-   CLIENT-SIDE CACHE — reduces origin hits by ~10x
+   CLIENT-SIDE CACHE
    ============================================================ */
 const CACHE_PRODUCTS_KEY = 'np_cache_products_v1';
 const CACHE_VIDEOS_KEY   = 'np_cache_videos_v1';
-const CACHE_PRODUCTS_TTL = 60 * 1000;         // 60 seconds
-const CACHE_VIDEOS_TTL   = 5 * 60 * 1000;     // 5 minutes
+const CACHE_PRODUCTS_TTL = 60 * 1000;
+const CACHE_VIDEOS_TTL   = 5 * 60 * 1000;
 
 function npReadCache(key, ttlMs) {
   try {
@@ -956,7 +1195,6 @@ function npWriteCache(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify({ t: Date.now(), v: value }));
   } catch (e) {
-    // Quota exceeded — clear caches and retry once
     try {
       localStorage.removeItem(CACHE_PRODUCTS_KEY);
       localStorage.removeItem(CACHE_VIDEOS_KEY);
@@ -985,9 +1223,6 @@ function npSafeRemove(key) {
   try { localStorage.removeItem(key); } catch {}
 }
 
-/* ============================================================
-   FETCH WITH TIMEOUT — protects against hung requests
-   ============================================================ */
 async function npFetch(url, opts = {}, timeoutMs = 10000) {
   const ctrl = new AbortController();
   const tid = setTimeout(() => { try { ctrl.abort(); } catch(e){} }, timeoutMs);
@@ -998,9 +1233,6 @@ async function npFetch(url, opts = {}, timeoutMs = 10000) {
   }
 }
 
-/* ============================================================
-   AUTH HEADER HELPER
-   ============================================================ */
 function npAuthHeaders(extra) {
   const token = npSafeGet('jwt_token') || '';
   const h = { ...(extra || {}) };
@@ -1008,9 +1240,6 @@ function npAuthHeaders(extra) {
   return h;
 }
 
-/* ============================================================
-   DEBOUNCE
-   ============================================================ */
 function npDebounce(fn, ms) {
   let t;
   return function(...args) {
@@ -1019,9 +1248,6 @@ function npDebounce(fn, ms) {
   };
 }
 
-/* ============================================================
-   DOM HELPERS
-   ============================================================ */
 const $=id=>document.getElementById(id);
 const show=el=>{if(el)el.classList.remove('hidden')};
 const hide=el=>{if(el)el.classList.add('hidden')};
@@ -1071,6 +1297,9 @@ function moneyM(m){return 'MK '+Number(m||0).toLocaleString()}
 function scrollChat(){if(chatBodyEl)chatBodyEl.scrollTop=chatBodyEl.scrollHeight}
 function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
 function isLoggedIn(){return !!npSafeGet('loggedInUser')}
+function displayName(){
+  return npSafeGet('loggedInEmail') || npSafeGet('loggedInUser') || 'guest';
+}
 
 function toast(title,msg){
   if(!toastContainer)return;
@@ -1085,9 +1314,6 @@ function homeToast(msg){
   clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-/* ============================================================
-   ACTIVE NAV TAB
-   ============================================================ */
 function setActiveNav(navName){
   document.querySelectorAll('.home-nav-item').forEach(btn=>{
     btn.classList.toggle('active', btn.dataset.nav === navName);
@@ -1095,7 +1321,7 @@ function setActiveNav(navName){
 }
 
 /* ============================================================
-   AI CHAT ORDER NOTIFICATION BADGE
+   BADGES
    ============================================================ */
 function getPendingOrders(){
   const n=parseInt(npSafeGet('np_pending_orders')||'0',10);
@@ -1105,68 +1331,37 @@ function setPendingOrders(n){
   npSafeSet('np_pending_orders', String(Math.max(0,n|0)));
   updateChatBadge();
 }
-function incrementOrderBadge(){
-  setPendingOrders(getPendingOrders()+1);
-}
-function clearChatBadge(){
-  setPendingOrders(0);
-}
+function incrementOrderBadge(){ setPendingOrders(getPendingOrders()+1); }
+function clearChatBadge(){ setPendingOrders(0); }
 function updateChatBadge(){
-  const el=$('navChatBadge');
-  if(!el)return;
+  const el=$('navChatBadge');if(!el)return;
   const n=getPendingOrders();
-  if(n>0){
-    el.textContent=n>99?'99+':n;
-    el.style.display='flex';
-  }else{
-    el.style.display='none';
-  }
+  if(n>0){ el.textContent=n>99?'99+':n; el.style.display='flex'; }
+  else el.style.display='none';
 }
-
-/* ============================================================
-   WISHLIST BADGE
-   ============================================================ */
 function getWishlistCount(){
-  try{
-    const w=JSON.parse(npSafeGet('np_wish')||'[]');
-    return Array.isArray(w)?w.length:0;
-  }catch(e){return 0}
+  try{ const w=JSON.parse(npSafeGet('np_wish')||'[]'); return Array.isArray(w)?w.length:0; }
+  catch(e){return 0}
 }
 function updateWishBadge(){
-  const el=$('homeWishBadge');
-  if(!el)return;
+  const el=$('homeWishBadge');if(!el)return;
   const n=getWishlistCount();
-  if(n>0){
-    el.textContent=n>99?'99+':n;
-    el.style.display='flex';
-  }else{
-    el.style.display='none';
-  }
+  if(n>0){ el.textContent=n>99?'99+':n; el.style.display='flex'; }
+  else el.style.display='none';
 }
-
-/* ============================================================
-   VIDEO SEEN TRACKING
-   ============================================================ */
 function getSeenVideos(){
   try{return JSON.parse(npSafeGet('np_seen_videos')||'[]')}
   catch(e){return[]}
 }
-function setSeenVideos(arr){
-  npSafeSet('np_seen_videos', JSON.stringify(arr));
-}
+function setSeenVideos(arr){ npSafeSet('np_seen_videos', JSON.stringify(arr)); }
 function updateVideoBadge(){
-  const badge=$('homeVideoBadge');
-  if(!badge)return;
+  const badge=$('homeVideoBadge');if(!badge)return;
   if(!isLoggedIn()){ badge.style.display='none'; return; }
   const seen=getSeenVideos();
   const unseen=allVideos.filter(v=>!seen.includes(v.key));
   const count=unseen.length;
-  if(count>0){
-    badge.textContent=count>9?'9+':count;
-    badge.style.display='flex';
-  } else {
-    badge.style.display='none';
-  }
+  if(count>0){ badge.textContent=count>9?'9+':count; badge.style.display='flex'; }
+  else badge.style.display='none';
 }
 function markAllVideosSeen(){
   const seen=getSeenVideos();
@@ -1211,15 +1406,8 @@ function typeBotMessage(text,onDone){
     for(let k = pending.length - 1; k >= 0; k--){
       const ch = pending[k];
       const next = pending[k+1];
-      if(ch === '.' || ch === '!' || ch === '?' || ch === '\n'){
-        cut = k + 1;
-        break;
-      }
-      if((ch === ',' || ch === ';' || ch === ':') &&
-         (next === undefined || /\s/.test(next))){
-        cut = k + 1;
-        break;
-      }
+      if(ch === '.' || ch === '!' || ch === '?' || ch === '\n'){ cut = k + 1; break; }
+      if((ch === ',' || ch === ';' || ch === ':') && (next === undefined || /\s/.test(next))){ cut = k + 1; break; }
     }
     if(cut < 0) return;
 
@@ -1229,10 +1417,7 @@ function typeBotMessage(text,onDone){
 
     try{
       const u = new SpeechSynthesisUtterance(phrase);
-      u.rate = 1.0;
-      u.pitch = 1.0;
-      u.volume = 1.0;
-      u.lang = 'en-US';
+      u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0; u.lang = 'en-US';
       speechSynthesis.speak(u);
     }catch(e){}
   }
@@ -1249,10 +1434,7 @@ function typeBotMessage(text,onDone){
           const tail = raw.slice(spokenUpTo).replace(/\*/g,'').replace(/\s+/g,' ').trim();
           if(tail){
             const u = new SpeechSynthesisUtterance(tail);
-            u.rate = 1.0;
-            u.pitch = 1.0;
-            u.volume = 1.0;
-            u.lang = 'en-US';
+            u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0; u.lang = 'en-US';
             speechSynthesis.speak(u);
           }
         }catch(e){}
@@ -1266,9 +1448,6 @@ function typeBotMessage(text,onDone){
   tick();
 }
 
-/* ============================================================
-   CHAT BUBBLES
-   ============================================================ */
 function addTyping(){
   if(!chatBubblesEl)return;
   const b=document.createElement('div');b.className='bubble bot typing';b.id='typing';
@@ -1306,7 +1485,7 @@ function zoomImg(src){
   const closeBtn = o.querySelector('.zoom-close');
   const img = o.querySelector('img');
   const container = o.querySelector('.zoom-image-container');
-  
+
   let scale = 1, translateX = 0, translateY = 0, startDistance = 0, startX = 0, startY = 0, isDragging = false, lastTap = 0;
   const updateTransform = () => { img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`; };
 
@@ -1350,46 +1529,6 @@ function zoomImg(src){
   npEnterScreen(closeFn);
 }
 
-function zoomProduct(src,data){
-  const o=document.createElement('div');o.className='zoom-overlay';
-  const stock=data.stock!=null?(data.stock>0?data.stock+' in stock':'Out of stock'):'';
-  o.innerHTML=`<button class="zoom-close">&times;</button>
-    <div class="zoom-image-container"><img src="${src}" alt="${esc(data.name||'Product')}"></div>
-    <div class="zoom-info">
-      <div class="zi-name">${esc(data.name||'Product')}</div>
-      ${data.price?`<div class="zi-price">${esc(data.price)}</div>`:''}
-      ${data.description?`<div class="zi-desc">${esc(data.description)}</div>`:''}
-      ${stock?`<div style="color:#8bc34a;font-size:13px;margin-bottom:8px">${stock}</div>`:''}
-      <button class="zi-btn" data-key="${esc(data.key||'')}">Order Now</button>
-    </div>`;
-  const closeBtn = o.querySelector('.zoom-close');
-  const img = o.querySelector('img');
-  const container = o.querySelector('.zoom-image-container');
-  let scale = 1, translateX = 0, translateY = 0, startDistance = 0, startX = 0, startY = 0, isDragging = false, lastTap = 0;
-  const updateTransform = () => { img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`; };
-  container.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) { startDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY); }
-    else if (e.touches.length === 1) {
-      startX = e.touches[0].pageX - translateX; startY = e.touches[0].pageY - translateY; isDragging = true;
-      const currentTime = new Date().getTime(); const tapLength = currentTime - lastTap;
-      if (tapLength < 300 && tapLength > 0) { if (scale > 1) { scale = 1; translateX = 0; translateY = 0; } else { scale = 2.5; } updateTransform(); e.preventDefault(); }
-      lastTap = currentTime;
-    }
-  }, { passive: false });
-  container.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (e.touches.length === 2) { const dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY); scale = Math.max(1, Math.min(scale * (dist / startDistance), 5)); updateTransform(); }
-    else if (e.touches.length === 1 && isDragging && scale > 1) { translateX = e.touches[0].pageX - startX; translateY = e.touches[0].pageY - startY; updateTransform(); }
-  }, { passive: false });
-  container.addEventListener('touchend', () => { isDragging = false; if (scale <= 1) { scale = 1; translateX = 0; translateY = 0; updateTransform(); } });
-  const closeFn=()=>{ if(o.parentElement) o.remove(); };
-  closeBtn.onclick=e=>{e.stopPropagation();npExitScreen()};
-  o.onclick=e=>{if(e.target===o)npExitScreen()};
-  o.querySelector('.zi-btn').onclick=e=>{ e.stopPropagation(); const k=e.currentTarget.dataset.key; npExitScreen(); if(k) setTimeout(()=>handleOrder(k),80); };
-  document.body.appendChild(o);
-  npEnterScreen(closeFn);
-}
-
 /* ============================================================
    CAROUSEL
    ============================================================ */
@@ -1410,7 +1549,7 @@ function buildCarousel(){
 }
 
 /* ============================================================
-   PRODUCTS — cached, 5s timeout, stale-on-error fallback
+   PRODUCTS
    ============================================================ */
 async function loadProducts(force = false){
   if (!force) {
@@ -1522,9 +1661,6 @@ function openQV(key){
 function closeQV(){ const m=$('qvModal'); if(!m||!m.classList.contains('open'))return; npExitScreen(); }
 window.closeQV=closeQV;
 
-/* ============================================================
-   LOGIN GATE / ORDER
-   ============================================================ */
 function handleOrder(key){
   closeQV();
   if(!isLoggedIn()){
@@ -1560,8 +1696,8 @@ function openChat(preserveChat){
     npEnterScreen(()=>{ hide(chatPageEl); show(homePageEl); renderHomeGrid(); });
   }
 
-  const user=npSafeGet('loggedInUser')||'guest';
-  const lbl=$('chatUserLabel');if(lbl)lbl.textContent='Logged in as '+user;
+  const shownName = displayName();
+  const lbl=$('chatUserLabel');if(lbl)lbl.textContent='Logged in as '+shownName;
 
   const mc=$('marketplaceContent');
   if(mc){mc.style.display='none';mc.innerHTML=''}
@@ -1570,8 +1706,8 @@ function openChat(preserveChat){
     chatBubblesEl.style.display='flex';
     if(!preserveChat){
       chatBubblesEl.innerHTML='';
-      const name=npSafeGet('loggedInUser')||'there';
-      typeBotMessage(`Hi ${name}! 👋\n\nI'm your NyPadrox AI shopping assistant.\n\nAsk me about any product — for example:\n• "Do you have solar panels?"\n• "Show me phones"\n• "How much is a fridge?"\n\nI'll show you real product images and details on request.`);
+      const name=shownName;
+      typeBotMessage(`Hello ${name}.\n\nI am your NyPadrox AI shopping assistant.\n\nAsk me about any product. For example:\n- "Do you have solar panels?"\n- "Show me phones"\n- "How much is a fridge?"\n\nI will show you real product images and details on request.`);
     }
   }
   buildCarousel();
@@ -1595,12 +1731,12 @@ function startOrder(key){
     ${p.features?`<div class="p-feat"><strong>Features:</strong> ${esc(p.features)}</div>`:''}
     <div class="p-stock">${p.stock||0} in stock</div>
   </div>`);
-  setTimeout(()=>{ typeBotMessage(`How many ${p.name}(s) would you like? (Type a number like 2)`); waitingForQty=true; },700);
+  setTimeout(()=>{ typeBotMessage(`How many units of ${p.name} would you like? (Type a number such as 2)`); waitingForQty=true; },700);
 }
 
 async function handleQty(msg){
   const n=parseInt(msg.trim());
-  if(isNaN(n)||n<=0){typeBotMessage('Please enter a valid number (e.g., 2)');return}
+  if(isNaN(n)||n<=0){typeBotMessage('Please enter a valid number (for example, 2)');return}
   const p=allProducts.find(x=>x.key===currentProductKey);
   if(!p){waitingForQty=false;return}
   if(n>(p.stock||0)){typeBotMessage(`Only ${p.stock||0} available. Choose a smaller quantity.`);return}
@@ -1621,7 +1757,7 @@ function showCart(){
     const m=i.price_mwk*i.quantity,u=i.price_usd*i.quantity;
     totalM+=m;totalU+=u;
     return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee">
-      <span>${esc(i.name)} × ${i.quantity}</span><span>${money(m,u)}</span></div>`;
+      <span>${esc(i.name)} x ${i.quantity}</span><span>${money(m,u)}</span></div>`;
   }).join('');
   addBotMsg(`<div class="product-details">
     <div class="p-name">Your Cart</div>
@@ -1676,7 +1812,7 @@ function handleCheckoutStep(msg){
     orderData.paymentMethod=map[msg];
     if(msg==='2'){pendingPayData={cart:[...currentCart],customer:{...orderData}};openMM();return true}
     let tM=0,tU=0;currentCart.forEach(i=>{tM+=i.price_mwk*i.quantity;tU+=i.price_usd*i.quantity});
-    let rows=currentCart.map(i=>`<div style="display:flex;justify-content:space-between;padding:4px 0"><span>${esc(i.name)} × ${i.quantity}</span><span>${money(i.price_mwk*i.quantity,i.price_usd*i.quantity)}</span></div>`).join('');
+    let rows=currentCart.map(i=>`<div style="display:flex;justify-content:space-between;padding:4px 0"><span>${esc(i.name)} x ${i.quantity}</span><span>${money(i.price_mwk*i.quantity,i.price_usd*i.quantity)}</span></div>`).join('');
     addBotMsg(`<div class="product-details">
       <div class="p-name">Order Summary</div>
       ${rows}
@@ -1710,10 +1846,10 @@ async function sendOrder(){
     const d=await r.json();
     if(d.success){
       addBotMsg(`<div class="product-details" style="background:#d4edda;border-left-color:#28a745">
-        <div class="p-name" style="color:#155724">Order Placed!</div>
+        <div class="p-name" style="color:#155724">Order Placed</div>
         <div style="font-size:14px"><strong>Order ID:</strong> ${esc(d.order_id||'N/A')}</div>
         <div style="font-size:14px"><strong>Total:</strong> ${money(payload.total_mwk,payload.total_usd)}</div>
-        <div style="font-size:14px;margin-top:6px">We'll contact you at ${esc(orderData.phone)}.</div>
+        <div style="font-size:14px;margin-top:6px">We will contact you at ${esc(orderData.phone)}.</div>
       </div>`);
       incrementOrderBadge();
       currentCart=[];waitingForCheckout=false;waitingForQty=false;currentProductKey=null;orderData={};currentOrderStep=0;
@@ -1723,7 +1859,7 @@ async function sendOrder(){
 }
 
 /* ============================================================
-   AI CHAT — now with Authorization header, no cart payload
+   AI CHAT
    ============================================================ */
 async function sendToBot(text){
   const user=npSafeGet('loggedInUser')||'guest';
@@ -1796,7 +1932,7 @@ function renderCatalog(d){
 }
 
 /* ============================================================
-   VIDEOS — cached with 5min TTL
+   VIDEOS
    ============================================================ */
 async function openVideos(){
   if(!isLoggedIn()){
@@ -1847,7 +1983,7 @@ function renderVideoGrid(){
   const g=$('videoGrid');if(!g)return;
   const c=$('videoCount');if(c)c.textContent=allVideos.length+' videos';
   if(!isLoggedIn()){
-    g.innerHTML=`<div class="video-locked-msg"><h3>🔒 Login Required</h3><p>Please login to watch our videos</p><button onclick="closeVideos();setTimeout(()=>showLoginWithMessage('Please login to watch videos'),80)">Login</button></div>`;
+    g.innerHTML=`<div class="video-locked-msg"><h3>Login Required</h3><p>Please login to watch our videos</p><button onclick="closeVideos();setTimeout(()=>showLoginWithMessage('Please login to watch videos'),80)">Login</button></div>`;
     return;
   }
   if(!allVideos.length){ g.innerHTML='<div class="video-empty">No videos available</div>'; return; }
@@ -1870,9 +2006,6 @@ function renderVideoGrid(){
   });
 }
 
-/* ============================================================
-   playVideo — view count comes from the server, no fake POST
-   ============================================================ */
 async function playVideo(key){
   if(!isLoggedIn()){ showLoginWithMessage('Please login to watch videos'); return; }
 
@@ -1886,7 +2019,6 @@ async function playVideo(key){
   }
   if(!v)return;
 
-  // Server increments views on the GET above; refresh local copy
   if (v.views != null) {
     const cached = allVideos.find(x=>x.key===key);
     if (cached) cached.views = v.views;
@@ -1922,7 +2054,7 @@ window.closeVideoPlayer=closeVideoPlayer;
 function openMM(){
   const items=pendingPayData?pendingPayData.cart:currentCart;
   let tM=0;items.forEach(i=>tM+=i.price_mwk*i.quantity);
-  const mi=$('mmItems');if(mi)mi.innerHTML=items.map(i=>`<div class="row"><span>${esc(i.name)} × ${i.quantity}</span><span>${moneyM(i.price_mwk*i.quantity)}</span></div>`).join('');
+  const mi=$('mmItems');if(mi)mi.innerHTML=items.map(i=>`<div class="row"><span>${esc(i.name)} x ${i.quantity}</span><span>${moneyM(i.price_mwk*i.quantity)}</span></div>`).join('');
   const mt=$('mmTotal');if(mt)mt.textContent=moneyM(tM);
   const mc=$('mmCount');if(mc)mc.textContent=items.length+' items';
   const mp=$('mmPhone');if(mp)mp.value='';
@@ -1989,7 +2121,7 @@ async function doPay(){
     }, 30000);
     const d=await r.json();
     if(d.success){
-      mmStatus('Payment successful!','ok');
+      mmStatus('Payment successful','ok');
       const orderPayload={
         items:items,customer:pendingPayData?pendingPayData.customer:orderData,total_mwk:tM,
         payment_method:'Mobile Money',payment_provider:provName,payment_status:'paid',
@@ -2008,7 +2140,7 @@ async function doPay(){
         setTimeout(()=>{
           openChat(true);
           addBotMsg(`<div class="product-details" style="background:#d4edda;border-left-color:#28a745">
-            <div class="p-name" style="color:#155724">Order Placed!</div>
+            <div class="p-name" style="color:#155724">Order Placed</div>
             <div><strong>Order ID:</strong> ${esc(d2.order_id||'')}</div>
             <div><strong>Payment:</strong> ${provName}</div>
             <div><strong>Total:</strong> ${moneyM(tM)}</div>
@@ -2187,80 +2319,325 @@ const accLogoutBtn=$('accLogout');
 if(accLogoutBtn)accLogoutBtn.onclick=()=>{ closeAccBubble(); if(!isLoggedIn()){homeToast('Not logged in');return} logout(); };
 
 /* ============================================================
-   LOGIN / REGISTER
+   SET PASSWORD (mainly for Google users)
    ============================================================ */
-if($('switchMode'))$('switchMode').onclick=()=>{
-  loginMode=!loginMode;
-  $('formTitle').textContent=loginMode?'Login':'Register';
-  $('authBtn').textContent=loginMode?'Login':'Create Account';
-  $('loginFields').style.display=loginMode?'block':'none';
-  $('regFields').style.display=loginMode?'none':'block';
-  $('switchMode').textContent=loginMode?"Don't have an account? Create Account":"Already have an account? Login";
-};
+function openSetPw(){
+  closeAccBubble();
+  if(!isLoggedIn()){ homeToast('Please login first'); return; }
+  const m=$('setPwModal');
+  if(m && !m.classList.contains('open')){
+    ['setPwCurrent','setPwNew','setPwConfirm'].forEach(id=>{ const el=$(id); if(el) el.value=''; });
+    const e=$('setPwErr'), o=$('setPwOk');
+    if(e) e.style.display='none';
+    if(o) o.style.display='none';
+    m.classList.add('open');
+    document.body.style.overflow='hidden';
+    npEnterScreen(()=>{ m.classList.remove('open'); document.body.style.overflow='auto'; });
+  }
+}
+function closeSetPw(){ const m=$('setPwModal'); if(!m || !m.classList.contains('open')) return; npExitScreen(); }
+window.closeSetPw=closeSetPw;
 
-if($('authBtn'))$('authBtn').onclick=async()=>{
-  const err=$('loginErr'),ok=$('loginOk');
-  if(err)err.style.display='none';
-  if(ok)ok.style.display='none';
-  const btn=$('authBtn');
-  const restoreText=()=>{ btn.classList.remove('loading'); btn.textContent=loginMode?'Login':'Create Account'; };
-  if(loginMode){
-    const u=$('username').value.trim(),p=$('password').value.trim();
-    if(!u||!p){if(err){err.textContent='Enter username and password';err.style.display='block'}return}
-    btn.disabled=true;
-    btn.classList.add('loading');
-    btn.innerHTML='<span class="btn-spinner"></span>';
+const accSetPwBtn=$('accSetPw');
+if(accSetPwBtn) accSetPwBtn.onclick=openSetPw;
+
+if($('setPwBtn')){
+  $('setPwBtn').onclick=async function(){
+    const cur=$('setPwCurrent').value||'';
+    const nw =$('setPwNew').value||'';
+    const cf =$('setPwConfirm').value||'';
+    const e=$('setPwErr'), o=$('setPwOk');
+    if(e) e.style.display='none';
+    if(o) o.style.display='none';
+
+    if(!nw || nw.length < 8 || !/[A-Z]/.test(nw) || !/[a-z]/.test(nw) || !/\d/.test(nw) || !/[!@#$%^&*(),.?":{}|<>]/.test(nw)){
+      if(e){ e.textContent='Password must be 8+ chars with upper, lower, number and special character.'; e.style.display='block'; }
+      return;
+    }
+    if(nw !== cf){
+      if(e){ e.textContent='Passwords do not match.'; e.style.display='block'; }
+      return;
+    }
+
+    const btn=$('setPwBtn');
+    if(btn){ btn.disabled=true; btn.classList.add('loading'); }
+    try{
+      const r = await npFetch(`${API}/api/set-password`, {
+        method: 'POST',
+        headers: npAuthHeaders({'Content-Type':'application/json'}),
+        body: JSON.stringify({ current_password: cur, new_password: nw })
+      }, 15000);
+      const d = await r.json();
+      if(r.ok && d.success){
+        if(o){ o.textContent = d.message || 'Password saved.'; o.style.display='block'; }
+        setTimeout(()=>{ closeSetPw(); }, 1400);
+      } else {
+        if(e){ e.textContent = d.message || 'Failed to save password.'; e.style.display='block'; }
+      }
+    }catch(ex){
+      if(e){ e.textContent='Network error. Please try again.'; e.style.display='block'; }
+    }finally{
+      if(btn){ btn.disabled=false; btn.classList.remove('loading'); }
+    }
+  };
+}
+
+/* ============================================================
+   AUTH — modern tabbed Sign In / Create Account
+   ============================================================ */
+const loginFormEl    = $('loginForm');
+const registerFormEl = $('registerForm');
+const tabIndicator   = $('tabIndicator');
+
+function npSwitchAuthTab(mode){
+  document.querySelectorAll('.auth-tab').forEach(t=>{
+    const on = t.dataset.tab === mode;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  if(tabIndicator) tabIndicator.classList.toggle('right', mode === 'register');
+  if(loginFormEl)    loginFormEl.classList.toggle('hidden', mode !== 'login');
+  if(registerFormEl) registerFormEl.classList.toggle('hidden', mode !== 'register');
+  const err=$('loginErr'), ok=$('loginOk');
+  if(err) err.style.display='none';
+  if(ok)  ok.style.display='none';
+}
+window.npSwitchAuthTab = npSwitchAuthTab;
+
+document.querySelectorAll('.auth-tab').forEach(t=>{
+  t.addEventListener('click',()=>npSwitchAuthTab(t.dataset.tab));
+});
+
+function npBindEye(btnId, inputId){
+  const b=$(btnId), i=$(inputId);
+  if(!b||!i) return;
+  b.addEventListener('click',()=>{
+    const shown = i.type === 'password';
+    i.type = shown ? 'text' : 'password';
+    b.innerHTML = shown ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+    b.setAttribute('aria-label', shown ? 'Hide password' : 'Show password');
+  });
+}
+npBindEye('togglePw','password');
+npBindEye('toggleRp','regPassword');
+npBindEye('toggleCp','confirmPassword');
+
+/* --- Dynamic icon on login field --- */
+(function(){
+  const loginIdInput = $('loginEmail');
+  const loginIdIcon  = $('loginIdIcon');
+  if(loginIdInput && loginIdIcon){
+    loginIdInput.addEventListener('input', ()=>{
+      const hasAt = loginIdInput.value.includes('@');
+      loginIdIcon.className = 'fas auth-icon ' + (hasAt ? 'fa-envelope' : 'fa-user');
+    });
+  }
+})();
+
+/* --- Password strength meter --- */
+function npPwScore(pw){
+  let s = 0;
+  if(pw.length >= 8) s++;
+  if(/[a-z]/.test(pw)) s++;
+  if(/[A-Z]/.test(pw)) s++;
+  if(/\d/.test(pw)) s++;
+  if(/[!@#$%^&*(),.?":{}|<>]/.test(pw)) s++;
+  return s;
+}
+const regPwInput = $('regPassword');
+if(regPwInput){
+  const bar = document.querySelector('#pwStrength .pw-bar');
+  const txt = $('pwStrengthText');
+  regPwInput.addEventListener('input',()=>{
+    const v = regPwInput.value;
+    if(!bar) return;
+    bar.classList.remove('weak','medium','strong');
+    if(!v){
+      if(txt) txt.textContent = 'At least 8 chars, with upper, lower, number and symbol';
+      return;
+    }
+    const s = npPwScore(v);
+    if(s <= 2){ bar.classList.add('weak');   if(txt) txt.textContent='Weak - add upper, numbers and symbols'; }
+    else if(s <= 3){ bar.classList.add('medium'); if(txt) txt.textContent='Fair - add a symbol and more variety'; }
+    else { bar.classList.add('strong'); if(txt) txt.textContent='Strong password'; }
+  });
+}
+
+/* --- LOGIN SUBMIT (accepts email OR username) --- */
+if(loginFormEl){
+  loginFormEl.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const err=$('loginErr'), ok=$('loginOk');
+    if(err) err.style.display='none';
+    if(ok)  ok.style.display='none';
+
+    const idVal = ($('loginEmail').value||'').trim();
+    const pwVal = $('password').value||'';
+
+    if(!idVal || !pwVal){
+      if(err){ err.textContent='Please enter your email/username and password.'; err.style.display='block'; }
+      return;
+    }
+
+    const isEmail = idVal.includes('@');
+    if(isEmail){
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(idVal)){
+        if(err){ err.textContent='Please enter a valid full email (e.g. you@example.com).'; err.style.display='block'; }
+        return;
+      }
+    } else {
+      if(!/^[a-zA-Z0-9_]{3,}$/.test(idVal)){
+        if(err){ err.textContent='Username must be 3+ letters, numbers, or underscores.'; err.style.display='block'; }
+        return;
+      }
+    }
+
+    const btn=$('authBtn');
+    if(btn){ btn.disabled = true; btn.classList.add('loading'); }
+
     try{
       const r = await npFetch(`${API}/api/login`, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({username:u,password:p})
+        body: JSON.stringify({
+          identifier: idVal,
+          email:      isEmail ? idVal : '',
+          username:   isEmail ? ''     : idVal,
+          password:   pwVal
+        })
       }, 15000);
-      const d=await r.json();
-      if(r.ok&&d.success){
-        npSafeSet('loggedInUser', u);
-        npSafeSet('session_id', d.session_id||'');
-        if(d.token)npSafeSet('jwt_token', d.token);
-        $('username').value='';
-        $('password').value='';
-        if(ok){ok.textContent='Login successful!';ok.style.display='block'}
-        if(loginPageEl && !loginPageEl.classList.contains('hidden')){ npExitScreen(); } else { hide(loginPageEl); }
-        const hbtn=$('homeLoginBtn');if(hbtn)hbtn.textContent='Account';
+      const d = await r.json();
+
+      if(r.ok && d.success){
+        npSafeSet('loggedInUser',  d.username || idVal);
+        npSafeSet('loggedInEmail', d.email    || (isEmail ? idVal : ''));
+        npSafeSet('session_id',    d.session_id || '');
+        if(d.token) npSafeSet('jwt_token', d.token);
+
+        const rm = $('rememberMe');
+        if(rm && rm.checked){ npSafeSet('np_remember_id', idVal); }
+        else { npSafeRemove('np_remember_id'); }
+
+        if(ok){
+          const shown = d.email || d.username || idVal;
+          ok.textContent = 'Welcome back, ' + shown;
+          ok.style.display='block';
+        }
+
+        if(loginPageEl && !loginPageEl.classList.contains('hidden')) npExitScreen();
+        else hide(loginPageEl);
+
+        const hbtn=$('homeLoginBtn');
+        if(hbtn) hbtn.textContent='Account';
+
         setTimeout(()=>{
-          // Start video poller instead of SSE for regular users
           startVideoPolling();
-          if(pendingOrderKey){ const k=pendingOrderKey;pendingOrderKey=null; openChat(true);setTimeout(()=>startOrder(k),200); }
-          else if(pendingCartCheckout){ pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),200); }
-          else { show(homePageEl); homeToast('Welcome, '+u); }
+          if(pendingOrderKey){
+            const k=pendingOrderKey; pendingOrderKey=null;
+            openChat(true); setTimeout(()=>startOrder(k),200);
+          } else if(pendingCartCheckout){
+            pendingCartCheckout=false;
+            openChat(true); setTimeout(()=>showCart(),200);
+          } else {
+            show(homePageEl);
+            homeToast('Welcome, ' + (d.email || d.username || idVal));
+          }
           updateVideoBadge();
-        },200);
-      } else if(err){err.textContent=d.message||'Invalid credentials';err.style.display='block'}
-    }catch(e){if(err){err.textContent='Server error';err.style.display='block'}}
-    finally{btn.disabled=false;restoreText();}
-  } else {
-    const fn=$('firstName').value.trim(),ln=$('lastName').value.trim(),em=$('email').value.trim(),p=$('regPassword').value,p2=$('confirmPassword').value;
-    if(!fn||!ln||!em||!p||!p2){if(err){err.textContent='All fields required';err.style.display='block'}return}
-    if(p!==p2){if(err){err.textContent='Passwords do not match';err.style.display='block'}return}
-    if(p.length<8||!/[A-Z]/.test(p)||!/[a-z]/.test(p)||!/\d/.test(p)||!/[!@#$%^&*(),.?":{}|<>]/.test(p)){if(err){err.textContent='Password too weak';err.style.display='block'}return}
-    btn.disabled=true;
-    btn.classList.add('loading');
-    btn.innerHTML='<span class="btn-spinner"></span>';
+        },220);
+      } else {
+        if(err){ err.textContent = d.message || 'Invalid email/username or password.'; err.style.display='block'; }
+      }
+    } catch(ex){
+      if(err){ err.textContent='Network error. Please check your connection.'; err.style.display='block'; }
+    } finally {
+      if(btn){ btn.disabled=false; btn.classList.remove('loading'); }
+    }
+  });
+}
+
+/* --- REGISTER SUBMIT --- */
+if(registerFormEl){
+  registerFormEl.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const err=$('loginErr'), ok=$('loginOk');
+    if(err) err.style.display='none';
+    if(ok)  ok.style.display='none';
+
+    const fn  = ($('firstName').value||'').trim();
+    const ln  = ($('lastName').value||'').trim();
+    const em  = ($('regEmail').value||'').trim().toLowerCase();
+    const pw  = $('regPassword').value||'';
+    const pw2 = $('confirmPassword').value||'';
+
+    if(!fn || !ln){
+      if(err){ err.textContent='Please enter your first and last name.'; err.style.display='block'; }
+      return;
+    }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(em)){
+      if(err){ err.textContent='Please enter a valid full email address.'; err.style.display='block'; }
+      return;
+    }
+    if(pw.length < 8 || !/[A-Z]/.test(pw) || !/[a-z]/.test(pw) || !/\d/.test(pw) || !/[!@#$%^&*(),.?":{}|<>]/.test(pw)){
+      if(err){ err.textContent='Password must be 8+ chars with upper, lower, number and special character.'; err.style.display='block'; }
+      return;
+    }
+    if(pw !== pw2){
+      if(err){ err.textContent='Passwords do not match.'; err.style.display='block'; }
+      return;
+    }
+
+    const btn=$('regBtn');
+    if(btn){ btn.disabled=true; btn.classList.add('loading'); }
+
     try{
       const r = await npFetch(`${API}/api/register`, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({username:em.split('@')[0],password:p,first_name:fn,last_name:ln,email:em,phone:''})
+        body: JSON.stringify({
+          username: em.split('@')[0],
+          password: pw,
+          first_name: fn,
+          last_name: ln,
+          email: em,
+          phone: ''
+        })
       }, 15000);
-      const d=await r.json();
-      if(r.ok&&d.success){
-        if(ok){ok.textContent='Account created! You can login.';ok.style.display='block'}
-        setTimeout(()=>{$('switchMode').click();$('username').value=d.username||em.split('@')[0]},800);
-      } else if(err){err.textContent=d.message||'Registration failed';err.style.display='block'}
-    }catch(e){if(err){err.textContent='Server error';err.style.display='block'}}
-    finally{btn.disabled=false;restoreText();}
-  }
-};
+      const d = await r.json();
 
+      if(r.ok && d.success){
+        if(ok){ ok.textContent = d.message || 'Account created. Please sign in.'; ok.style.display='block'; }
+        setTimeout(()=>{
+          npSwitchAuthTab('login');
+          const idI = $('loginEmail');
+          if(idI) idI.value = em;
+          const pwI = $('password');
+          if(pwI){ pwI.value=''; pwI.focus(); }
+        }, 900);
+      } else {
+        if(err){ err.textContent = d.message || 'Registration failed. Please try again.'; err.style.display='block'; }
+      }
+    } catch(ex){
+      if(err){ err.textContent='Network error. Please check your connection.'; err.style.display='block'; }
+    } finally {
+      if(btn){ btn.disabled=false; btn.classList.remove('loading'); }
+    }
+  });
+}
+
+/* --- Prefill remembered identity --- */
+(function(){
+  const remembered = npSafeGet('np_remember_id');
+  if(remembered){
+    const idI = $('loginEmail');
+    if(idI) idI.value = remembered;
+    const rm = $('rememberMe');
+    if(rm) rm.checked = true;
+    const icon = $('loginIdIcon');
+    if(icon) icon.className = 'fas auth-icon ' + (remembered.includes('@') ? 'fa-envelope' : 'fa-user');
+  }
+})();
+
+/* --- Google button --- */
 if($('googleBtn'))$('googleBtn').onclick=()=>{
   const g=$('googleBtn');
   if(g.classList.contains('loading')) return;
@@ -2270,51 +2647,7 @@ if($('googleBtn'))$('googleBtn').onclick=()=>{
   setTimeout(()=>{ window.location.href=`${API}/api/google_login`; }, 120);
 };
 
-(function(){
-  try{
-    const p=new URLSearchParams(location.search);
-    const tk=p.get('token'),sid=p.get('session_id'),un=p.get('username');
-    if(tk&&sid&&un){
-      npSafeSet('loggedInUser', un);
-      npSafeSet('session_id', sid);
-      npSafeSet('jwt_token', tk);
-      history.replaceState({},document.title,location.pathname);
-      setTimeout(()=>{
-        if(loginPageEl && !loginPageEl.classList.contains('hidden')) npExitScreen();
-        else hide(loginPageEl);
-        const btn=$('homeLoginBtn');if(btn)btn.textContent='Account';
-        if(pendingOrderKey){const k=pendingOrderKey;pendingOrderKey=null;openChat(true);setTimeout(()=>startOrder(k),200)}
-        else if(pendingCartCheckout){pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),200)}
-        else show(homePageEl);
-        startVideoPolling();
-        updateVideoBadge();
-      },200);
-    }
-  }catch(e){}
-})();
-
-function logout(){
-  if(eventSource){try{eventSource.close()}catch(e){};eventSource=null}
-  stopVideoPolling();
-  npSafeRemove('loggedInUser');
-  npSafeRemove('session_id');
-  npSafeRemove('jwt_token');
-  hide(chatPageEl);
-  hide(loginPageEl);
-  show(homePageEl);
-  const btn=$('homeLoginBtn');if(btn)btn.textContent='Sign in';
-  pendingOrderKey=null;pendingCartCheckout=false;currentCart=[];
-  updateCartBadges();
-  updateVideoBadge();
-  homeToast('Logged out');
-}
-
-if($('backHome'))$('backHome').onclick=()=>{
-  pendingOrderKey=null;pendingCartCheckout=false;
-  if(loginPageEl && !loginPageEl.classList.contains('hidden')){ npExitScreen(); }
-  else { hide(loginPageEl); show(homePageEl); }
-};
-
+/* --- Forgot password link --- */
 if($('forgotLink'))$('forgotLink').onclick=e=>{
   e.preventDefault();
   const m=$('forgotModal');
@@ -2323,14 +2656,19 @@ if($('forgotLink'))$('forgotLink').onclick=e=>{
     npEnterScreen(()=>{
       m.classList.remove('open');
       document.querySelectorAll('#forgotModal .step').forEach(s=>s.style.display='none');
-      const r1=$('rs1');if(r1)r1.style.display='block';
+      const r1=$('rs1'); if(r1) r1.style.display='block';
     });
   }
 };
-if($('togglePw'))$('togglePw').onclick=()=>{const i=$('password');i.type=i.type==='password'?'text':'password'};
-if($('toggleRp'))$('toggleRp').onclick=()=>{const i=$('regPassword');i.type=i.type==='password'?'text':'password'};
-if($('toggleCp'))$('toggleCp').onclick=()=>{const i=$('confirmPassword');i.type=i.type==='password'?'text':'password'};
 
+/* --- Back to guest --- */
+if($('backHome'))$('backHome').onclick=()=>{
+  pendingOrderKey=null; pendingCartCheckout=false;
+  if(loginPageEl && !loginPageEl.classList.contains('hidden')){ npExitScreen(); }
+  else { hide(loginPageEl); show(homePageEl); }
+};
+
+/* --- Forgot password flow --- */
 window.closeForgot=()=>{ const m=$('forgotModal'); if(!m || !m.classList.contains('open')) return; npExitScreen(); };
 window.goBackRs=()=>{document.querySelectorAll('#forgotModal .step').forEach(s=>s.style.display='none');const r1=$('rs1');if(r1)r1.style.display='block'};
 
@@ -2378,7 +2716,7 @@ if($('resetPwBtn'))$('resetPwBtn').onclick=async function(){
       body: JSON.stringify({email:resetEmail,new_password:p,temp_token:tempToken})
     }, 15000);
     const d=await r.json();
-    if(d.success){alert('Password reset! You can login.');closeForgot()}
+    if(d.success){alert('Password reset. You can login.');closeForgot()}
     else alert(d.message||'Failed');
   }catch(e){alert('Error')}
   finally{this.disabled=false;this.textContent='Reset Password'}
@@ -2419,7 +2757,7 @@ if($('homeClearFilter'))$('homeClearFilter').onclick=()=>{
 };
 
 /* ============================================================
-   DEBOUNCED SEARCH
+   SEARCH
    ============================================================ */
 if($('homeSearchInput')){
   const doSearch = npDebounce(function(){
@@ -2474,13 +2812,13 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     closeOverlay('catOverlay');closeOverlay('homePicOverlay');closeAccBubble();
-    closeMM();closeQV();closeForgot();closeVideos();closeVideoPlayer();
+    closeMM();closeQV();closeForgot();closeSetPw();closeVideos();closeVideoPlayer();
     const z=document.querySelector('.zoom-overlay');if(z)z.remove();
   }
 });
 
 /* ============================================================
-   SSE — admins only, with jitter (kept for /api/events)
+   SSE — admins only
    ============================================================ */
 function connectSSE(token, isAdmin){
   if (!isAdmin) return;
@@ -2518,7 +2856,7 @@ function connectSSE(token, isAdmin){
       eventSource=null;
       if(sseRetries<5){
         sseRetries++;
-        const delay = 3000 * sseRetries + Math.random() * 2000;   // jitter
+        const delay = 3000 * sseRetries + Math.random() * 2000;
         setTimeout(()=>connectSSE(token, true), delay);
       }
     };
@@ -2526,8 +2864,7 @@ function connectSSE(token, isAdmin){
 }
 
 /* ============================================================
-   VIDEO POLLER — replaces SSE for non-admin users
-   Polls every 5 min while tab is visible, pauses when hidden
+   VIDEO POLLER
    ============================================================ */
 let _videoPollTimer = null;
 
@@ -2542,7 +2879,6 @@ async function _videoPollTick() {
 function startVideoPolling() {
   if (!npSafeGet('jwt_token')) return;
   if (_videoPollTimer) return;
-  // First refresh after 60s, then every 5 min
   setTimeout(_videoPollTick, 60_000);
   _videoPollTimer = setInterval(_videoPollTick, 5 * 60_000);
 }
@@ -2557,12 +2893,59 @@ document.addEventListener('visibilitychange', () => {
   } else {
     if (npSafeGet('jwt_token')) {
       startVideoPolling();
-      // One immediate refresh on refocus
       npClearCache(CACHE_VIDEOS_KEY);
       loadVideos(true).then(()=>{ try{renderVideoGrid()}catch(e){} });
     }
   }
 });
+
+/* ============================================================
+   LOGOUT (clears both identities)
+   ============================================================ */
+function logout(){
+  if(eventSource){try{eventSource.close()}catch(e){};eventSource=null}
+  stopVideoPolling();
+  npSafeRemove('loggedInUser');
+  npSafeRemove('loggedInEmail');
+  npSafeRemove('session_id');
+  npSafeRemove('jwt_token');
+  hide(chatPageEl);
+  hide(loginPageEl);
+  show(homePageEl);
+  const btn=$('homeLoginBtn');if(btn)btn.textContent='Sign in';
+  pendingOrderKey=null;pendingCartCheckout=false;currentCart=[];
+  updateCartBadges();
+  updateVideoBadge();
+  homeToast('Logged out');
+}
+
+/* ============================================================
+   OAUTH CALLBACK HANDLER
+   ============================================================ */
+(function(){
+  try{
+    const p=new URLSearchParams(location.search);
+    const tk=p.get('token'),sid=p.get('session_id'),un=p.get('username');
+    if(tk&&sid&&un){
+      npSafeSet('loggedInUser', un);
+      npSafeSet('session_id', sid);
+      npSafeSet('jwt_token', tk);
+      const emailParam = p.get('email') || '';
+      if(emailParam) npSafeSet('loggedInEmail', emailParam);
+      history.replaceState({},document.title,location.pathname);
+      setTimeout(()=>{
+        if(loginPageEl && !loginPageEl.classList.contains('hidden')) npExitScreen();
+        else hide(loginPageEl);
+        const btn=$('homeLoginBtn');if(btn)btn.textContent='Account';
+        if(pendingOrderKey){const k=pendingOrderKey;pendingOrderKey=null;openChat(true);setTimeout(()=>startOrder(k),200)}
+        else if(pendingCartCheckout){pendingCartCheckout=false;openChat(true);setTimeout(()=>showCart(),200)}
+        else show(homePageEl);
+        startVideoPolling();
+        updateVideoBadge();
+      },200);
+    }
+  }catch(e){}
+})();
 
 /* ============================================================
    PWA
@@ -2589,9 +2972,9 @@ if($('installBtn')){
       }catch(e){}
       deferredPrompt=null; refreshInstall(); return;
     }
-    if(isIOS()){ alert('Install NyPadrox on iPhone / iPad:\n\n1. Tap the Share button (the square with an up-arrow) in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top-right corner\n\nThe NyPadrox icon will then appear on your home screen.'); return; }
-    if(isSafari()){ alert('Install NyPadrox on macOS Safari:\n\nFile menu → "Add to Dock…"\n\n(If you don\'t see it, update Safari to version 17 or later.)'); return; }
-    alert('Install NyPadrox:\n\n• Chrome / Edge: open the browser menu (⋮) → "Install NyPadrox" or "Install app"\n• Firefox (Android): menu → "Install"\n• Samsung Internet: menu → "Add page to" → "Home screen"');
+    if(isIOS()){ alert('Install NyPadrox on iPhone / iPad:\n\n1. Tap the Share button in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top-right corner\n\nThe NyPadrox icon will then appear on your home screen.'); return; }
+    if(isSafari()){ alert('Install NyPadrox on macOS Safari:\n\nFile menu > "Add to Dock..."\n\nIf you do not see it, update Safari to version 17 or later.'); return; }
+    alert('Install NyPadrox:\n\n- Chrome / Edge: open the browser menu then "Install NyPadrox" or "Install app"\n- Firefox (Android): menu > "Install"\n- Samsung Internet: menu > "Add page to" > "Home screen"');
   };
 }
 if('serviceWorker' in navigator){
@@ -2613,7 +2996,6 @@ window.onload=()=>{
     const user=npSafeGet('loggedInUser');
     if(user){
       const btn=$('homeLoginBtn');if(btn)btn.textContent='Account';
-      // Start video poller for logged-in users
       startVideoPolling();
     } else {
       const btn=$('homeLoginBtn');if(btn)btn.textContent='Sign in';
