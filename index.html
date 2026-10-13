@@ -13,10 +13,10 @@
 <link rel="manifest" href="manifest.json">
 <title>NyPadrox Online Marketplace</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" type="image/jpeg" href="https://i.imgur.com/57yg1jO.jpg">
-<link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/57yg1jO.jpg">
-<link rel="apple-touch-icon" sizes="192x192" href="https://i.imgur.com/57yg1jO.jpg">
-<link rel="apple-touch-icon" sizes="512x512" href="https://i.imgur.com/57yg1jO.jpg">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+<link rel="apple-touch-icon" sizes="192x192" href="logo.png">
+<link rel="apple-touch-icon" sizes="512x512" href="logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
@@ -553,7 +553,7 @@ input{font-family:inherit}
 <body>
 
 <div class="splash" id="splash">
-  <div class="splash-icon"><img src="https://i.imgur.com/57yg1jO.jpg" alt="NyPadrox"></div>
+  <div class="splash-icon"><img src="logo.png" alt="NyPadrox"></div>
   <div class="splash-text">NyPadrox Marketplace</div>
   <div class="splash-loader"></div>
 </div>
@@ -564,7 +564,7 @@ input{font-family:inherit}
     <div class="home-appbar">
       <div class="home-appbar-row">
         <div class="home-brand">
-          <div class="home-brand-logo"><img src="https://i.imgur.com/57yg1jO.jpg" alt="NyPadrox"></div>
+          <div class="home-brand-logo"><img src="logo.png" alt="NyPadrox"></div>
           <span>NyPadrox</span>
         </div>
         <div class="home-appbar-actions">
@@ -746,7 +746,7 @@ input{font-family:inherit}
 
 <div class="login-box hidden" id="loginPage">
   <div class="login-logo">
-    <img src="https://i.imgur.com/57yg1jO.jpg" alt="NyPadrox Logo">
+    <img src="logo.png" alt="NyPadrox Logo">
   </div>
   <h2 id="formTitle">Login</h2>
   <div id="loginErr" style="color:#d31a05;margin-bottom:10px;display:none"></div>
@@ -825,7 +825,7 @@ input{font-family:inherit}
 
 <div id="chatPage" class="hidden">
   <div class="chat-header">
-    <div class="chat-header-logo"><img src="https://i.imgur.com/57yg1jO.jpg" alt=""></div>
+    <div class="chat-header-logo"><img src="logo.png" alt=""></div>
     <div class="chat-header-text">
       <h3>NyPadrox AI Assistant</h3>
       <p id="chatUserLabel">Online</p>
@@ -1399,7 +1399,7 @@ function buildCarousel(){
   let html='';
   allProducts.forEach(p=>{
     html+=`<div class="chat-carousel-slide" data-key="${esc(p.key)}">
-      <img src="${esc(p.image||'https://i.imgur.com/57yg1jO.jpg')}" alt="${esc(p.name)}" loading="lazy">
+      <img src="${esc(p.image||'logo.png')}" alt="${esc(p.name)}" loading="lazy">
       <div class="chat-carousel-cap">${esc(p.name)}</div>
     </div>`;
   });
@@ -1466,7 +1466,7 @@ function renderHomeGrid(){
     const stock=Number(p.stock||0);const avail=stock>0;const inW=wish.includes(p.key);
     return `<div class="home-card">
       <div class="home-card-img-wrap">
-        <img class="home-card-img" src="${esc(p.image||'https://i.imgur.com/57yg1jO.jpg')}" alt="${esc(p.name)}" loading="lazy" onclick="openQV('${esc(p.key)}')">
+        <img class="home-card-img" src="${esc(p.image||'logo.png')}" alt="${esc(p.name)}" loading="lazy" onclick="openQV('${esc(p.key)}')">
         <button class="home-card-wish ${inW?'active':''}" onclick="event.stopPropagation();toggleWish('${esc(p.key)}')"><i class="fas fa-heart"></i></button>
         ${!avail?'<div class="home-card-out">OUT OF STOCK</div>':''}
       </div>
@@ -1854,7 +1854,7 @@ function renderVideoGrid(){
   g.innerHTML=allVideos.map(v=>`
     <div class="video-card" data-key="${esc(v.key)}">
       <div class="vc-thumb">
-        <img src="${esc(v.thumbnail||'https://i.imgur.com/57yg1jO.jpg')}" alt="${esc(v.title)}" loading="lazy">
+        <img src="${esc(v.thumbnail||'logo.png')}" alt="${esc(v.title)}" loading="lazy">
         <div class="vc-play"><i class="fas fa-play"></i></div>
         ${v.duration?`<div class="vc-dur">${esc(v.duration)}</div>`:''}
       </div>
@@ -2106,7 +2106,7 @@ function showCategories(){
       <div class="cat-title">${esc(cat)} <span class="cat-count">${items.length}</span></div>
       <div class="cat-grid">
         ${items.slice(0,20).map(p=>`<div class="cat-card" onclick="openQV('${esc(p.key)}')">
-          <img src="${esc(p.image||'https://i.imgur.com/57yg1jO.jpg')}" alt="${esc(p.name)}" loading="lazy">
+          <img src="${esc(p.image||'logo.png')}" alt="${esc(p.name)}" loading="lazy">
           <div class="cat-card-name">${esc(p.name)}</div>
         </div>`).join('')}
       </div>
@@ -2120,7 +2120,7 @@ function showHomePics(){
   if(!allProducts.length){ b.innerHTML='<div class="home-empty">Loading...</div>'; loadProducts().then(()=>showHomePics()); return; }
   b.innerHTML=`<div class="cat-grid" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr))">
     ${allProducts.map(p=>`<div class="cat-card" onclick="openQV('${esc(p.key)}')">
-      <img src="${esc(p.image||'https://i.imgur.com/57yg1jO.jpg')}" alt="${esc(p.name)}" loading="lazy">
+      <img src="${esc(p.image||'logo.png')}" alt="${esc(p.name)}" loading="lazy">
       <div class="cat-card-name">${esc(p.name)}</div>
     </div>`).join('')}
   </div>`;
