@@ -28,8 +28,10 @@
   --brand-green:#039161;
   --text:#1e293b;
   --line:#e2e8f0;
-  --bg:#f1f5f9;
+  --bg:#e9eef4;
   --card-bg:#ffffff;
+  --surface-soft:#fbfcfd;
+  --field-bg:#eef2f7;
   --nav-active-blue:#2563eb;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -213,13 +215,17 @@ input{font-family:inherit}
 
 /* ============ MODERN AUTH ============ */
 .login-box{
-  width:94%;max-width:470px;padding:34px 32px 26px;background:var(--card-bg);
+  width:94%;max-width:470px;padding:34px 32px 26px;
+  background:linear-gradient(180deg,#fcfdfe 0%,#f6f8fa 100%);
   border-radius:24px;
-  box-shadow:0 24px 60px rgba(15,23,42,.16), 0 2px 6px rgba(15,23,42,.05);
+  box-shadow:0 20px 50px rgba(15,23,42,.18), 0 4px 12px rgba(15,23,42,.06);
   text-align:center;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-  z-index:600;border:1px solid rgba(15,23,42,.05);
-  max-height:94vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  z-index:600;border:1px solid rgba(15,23,42,.06);
+  max-height:calc(100vh - 40px);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
   animation:slideIn .45s cubic-bezier(.2,.8,.2,1);
+  scroll-padding-bottom:120px;
+  padding-bottom:40px;
 }
 @keyframes slideIn{
   from{transform:translate(-50%,-50%) translateY(24px);opacity:0}
@@ -233,17 +239,17 @@ input{font-family:inherit}
 
 .auth-tabs{
   position:relative;display:grid;grid-template-columns:1fr 1fr;
-  background:#f1f5f9;border-radius:12px;padding:4px;margin-bottom:20px;
+  background:#eef2f6;border-radius:12px;padding:4px;margin-bottom:20px;
 }
 .auth-tab{
   position:relative;z-index:2;background:transparent;border:none;
-  padding:11px 10px;font-size:14px;font-weight:600;color:#64748b;
+  padding:11px 10px;font-size:14px;font-weight:600;color:#475569;
   border-radius:9px;transition:color .25s ease;font-family:inherit;
 }
 .auth-tab.active{color:#0f172a;}
 .auth-tab-indicator{
   position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);
-  background:#fff;border-radius:9px;
+  background:#fdfefe;border-radius:9px;
   box-shadow:0 1px 3px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04);
   transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:1;
 }
@@ -264,7 +270,7 @@ input{font-family:inherit}
 }
 .auth-input-wrap{
   position:relative;display:flex;align-items:center;
-  background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;
+  background:var(--field-bg);border:1.5px solid #d1d9e2;border-radius:12px;
   transition:border-color .2s,background .2s,box-shadow .2s;
 }
 .auth-input-wrap:focus-within{
@@ -280,6 +286,7 @@ input{font-family:inherit}
   flex:1;min-width:0;border:none;outline:none;background:transparent;
   padding:13px 12px 13px 0;font-size:14.5px;color:var(--text);font-family:inherit;
 }
+.auth-input-wrap.no-icon input{padding-left:14px;}
 .auth-input-wrap input::placeholder{color:#cbd5e1;}
 .auth-eye{
   background:none;border:none;padding:0 14px;color:#94a3b8;
@@ -289,7 +296,7 @@ input{font-family:inherit}
 .auth-hint{font-size:11.5px;color:#94a3b8;line-height:1.4;padding-left:2px;}
 
 .auth-row{
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:center;justify-content:flex-end;
   gap:10px;margin-top:-2px;
 }
 .auth-check{
@@ -317,10 +324,10 @@ input{font-family:inherit}
   color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;
   letter-spacing:.2px;display:flex;align-items:center;justify-content:center;
   gap:8px;transition:transform .15s,box-shadow .2s,opacity .2s;
-  box-shadow:0 6px 16px rgba(3,81,145,.22);cursor:pointer;font-family:inherit;
+  box-shadow:0 8px 20px rgba(3,81,145,.28);cursor:pointer;font-family:inherit;
 }
 .auth-submit:hover:not(:disabled){
-  transform:translateY(-1px);box-shadow:0 10px 22px rgba(3,81,145,.3);
+  transform:translateY(-1px);box-shadow:0 10px 24px rgba(3,81,145,.34);
 }
 .auth-submit:active:not(:disabled){transform:translateY(0);}
 .auth-submit:disabled{opacity:.85;cursor:not-allowed;transform:none;}
@@ -344,7 +351,7 @@ input{font-family:inherit}
 
 .auth-divider{
   display:flex;align-items:center;text-align:center;
-  margin:20px 0 14px;color:#94a3b8;font-size:12px;font-weight:500;
+  margin:20px 0 16px;color:#94a3b8;font-size:12px;font-weight:500;
 }
 .auth-divider::before,.auth-divider::after{
   content:'';flex:1;border-bottom:1px solid #e2e8f0;
@@ -353,25 +360,48 @@ input{font-family:inherit}
 .auth-divider::after {margin-left:12px;}
 
 .google-btn{
-  background:#ffffff;border:1.5px solid #e2e8f0;border-radius:14px;
-  padding:14px 18px;color:#374151;display:flex;align-items:center;
+  background:#fdfefe;border:1.5px solid #e2e8f0;border-radius:14px;
+  padding:12px 18px;color:#374151;display:flex;align-items:center;
   justify-content:center;gap:10px;font-weight:600;font-size:15px;
   font-family:Inter,Arial,sans-serif;box-shadow:0 1px 2px rgba(0,0,0,.02);
   transition:all .2s;width:100%;white-space:nowrap;cursor:pointer;
 }
-.google-btn:hover{background:#f8fafc;border-color:#cbd5e1;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+.google-btn:hover{background:#f4f6f9;border-color:#cbd5e1;box-shadow:0 4px 12px rgba(0,0,0,.05);}
 .google-btn span{color:#374151;}
 .google-btn svg{flex-shrink:0;}
 
-.auth-footer{margin-top:14px;text-align:center;}
+.auth-footer{margin-top:16px;text-align:center;}
 .auth-ghost{
   background:none;border:none;color:#64748b;font-size:12.5px;
   font-weight:500;cursor:pointer;padding:6px;font-family:inherit;
+  display:inline-flex;align-items:center;gap:7px;
 }
 .auth-ghost:hover{color:var(--brand-blue);}
+.auth-ghost i{font-size:11px;transition:transform .2s ease;}
+.auth-ghost:hover i{transform:translateX(-3px);}
+
+/* ---- Standalone password field with toggle (reset modal) ---- */
+.pw-field{position:relative;display:flex;align-items:center;width:100%;}
+.pw-field input{
+  width:100%;padding:12px 46px 12px 14px;border:1.5px solid #d1d9e2;border-radius:10px;
+  font-size:14px;background:var(--field-bg);outline:none;font-family:inherit;
+  color:var(--text);transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.pw-field input::placeholder{color:#cbd5e1;}
+.pw-field input:focus{border-color:var(--brand-blue);background:#fff;box-shadow:0 0 0 4px rgba(3,81,145,.08);}
+.pw-toggle{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  background:none;border:none;width:34px;height:34px;border-radius:50%;
+  color:#94a3b8;font-size:14px;display:flex;align-items:center;justify-content:center;
+  transition:color .2s,background .2s;flex-shrink:0;
+}
+.pw-toggle:hover{color:var(--brand-blue);background:rgba(3,81,145,.07);}
+
+/* ---- Google G inside account bubble ---- */
+.acc-ic svg{display:inline-block;vertical-align:middle;}
 
 @media (max-width:480px){
-  .login-box{width:95%;padding:26px 20px 20px;border-radius:20px;}
+  .login-box{width:95%;padding:26px 20px 30px;border-radius:20px;}
   .login-logo{height:80px;margin-bottom:14px;}
   .auth-name-row{grid-template-columns:1fr;}
   .auth-tabs{margin-bottom:16px;}
@@ -537,7 +567,7 @@ input{font-family:inherit}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;
                align-items:center;justify-content:center;z-index:3000;padding:20px}
 .modal-overlay.open{display:flex}
-.modal-panel{background:var(--card-bg);border-radius:16px;max-width:600px;width:100%;max-height:90vh;overflow:auto;
+.modal-panel{background:var(--surface-soft);border-radius:16px;max-width:600px;width:100%;max-height:90vh;overflow:auto;
              padding:26px;position:relative;animation:panelUp .3s ease}
 .modal-close{position:absolute;top:12px;right:16px;font-size:26px;color:#9ca3af;background:none;border:none}
 .modal-panel img.qv-img{width:100%;max-height:300px;object-fit:contain;border-radius:8px;margin-bottom:14px}
@@ -846,7 +876,17 @@ input{font-family:inherit}
 
 <div class="acc-bubble" id="accBubble">
   <button class="acc-item" id="accHome"><span class="acc-ic"><i class="fas fa-home"></i></span><span>Back to Home</span></button>
-  <button class="acc-item" id="accSetPw"><span class="acc-ic"><i class="fas fa-key"></i></span><span>Set Password</span></button>
+  <button class="acc-item" id="accSetPw">
+    <span class="acc-ic">
+      <svg viewBox="0 0 48 48" width="16" height="16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+      </svg>
+    </span>
+    <span>Set Password</span>
+  </button>
   <button class="acc-item logout" id="accLogout"><span class="acc-ic"><i class="fas fa-sign-out-alt"></i></span><span>Logout</span></button>
 </div>
 
@@ -890,17 +930,15 @@ input{font-family:inherit}
       <div class="auth-input-wrap">
         <i class="fas fa-user auth-icon" id="loginIdIcon"></i>
         <input type="text" id="loginEmail" name="identifier"
-               placeholder="you@example.com or your_username"
+               placeholder="Enter email or username"
                autocomplete="username" autocapitalize="none"
                autocorrect="off" spellcheck="false" inputmode="text">
       </div>
-      <small class="auth-hint">Sign in with either your full email address or your username.</small>
     </div>
 
     <div class="auth-field">
       <label for="password">Password</label>
-      <div class="auth-input-wrap">
-        <i class="fas fa-lock auth-icon"></i>
+      <div class="auth-input-wrap no-icon">
         <input type="password" id="password" name="password" placeholder="Enter your password"
                autocomplete="current-password">
         <button type="button" class="auth-eye" id="togglePw" aria-label="Show password">
@@ -910,7 +948,6 @@ input{font-family:inherit}
     </div>
 
     <div class="auth-row">
-      <label class="auth-check"><input type="checkbox" id="rememberMe"><span>Remember me</span></label>
       <a href="#" id="forgotLink" class="auth-link">Forgot password?</a>
     </div>
 
@@ -944,7 +981,7 @@ input{font-family:inherit}
         <input type="email" id="regEmail" placeholder="you@example.com"
                autocomplete="email" inputmode="email" spellcheck="false">
       </div>
-      <small class="auth-hint">We will use this to sign you in and send order updates.</small>
+      <small class="auth-hint">Used for sign in and order updates.</small>
     </div>
 
     <div class="auth-field">
@@ -993,7 +1030,7 @@ input{font-family:inherit}
   </button>
 
   <div class="auth-footer">
-    <button type="button" class="auth-ghost" id="backHome">Continue browsing as guest</button>
+    <button type="button" class="auth-ghost" id="backHome"><i class="fas fa-arrow-left"></i><span>Continue browsing as guest</span></button>
   </div>
 </div>
 
@@ -1013,7 +1050,8 @@ input{font-family:inherit}
       <label for="setPwCurrent">Current password (optional)</label>
       <div class="auth-input-wrap">
         <i class="fas fa-lock auth-icon"></i>
-        <input type="password" id="setPwCurrent" placeholder="Leave blank if you used Google">
+        <input type="password" id="setPwCurrent" placeholder="Leave blank if you used Google" autocomplete="current-password">
+        <button type="button" class="auth-eye" id="toggleSetCur" aria-label="Show password"><i class="fas fa-eye"></i></button>
       </div>
     </div>
 
@@ -1021,7 +1059,8 @@ input{font-family:inherit}
       <label for="setPwNew">New password</label>
       <div class="auth-input-wrap">
         <i class="fas fa-key auth-icon"></i>
-        <input type="password" id="setPwNew" placeholder="8+ chars, upper, lower, number, symbol">
+        <input type="password" id="setPwNew" placeholder="8+ chars, upper, lower, number, symbol" autocomplete="new-password">
+        <button type="button" class="auth-eye" id="toggleSetNew" aria-label="Show password"><i class="fas fa-eye"></i></button>
       </div>
     </div>
 
@@ -1029,7 +1068,8 @@ input{font-family:inherit}
       <label for="setPwConfirm">Confirm new password</label>
       <div class="auth-input-wrap">
         <i class="fas fa-key auth-icon"></i>
-        <input type="password" id="setPwConfirm" placeholder="Re-enter new password">
+        <input type="password" id="setPwConfirm" placeholder="Re-enter new password" autocomplete="new-password">
+        <button type="button" class="auth-eye" id="toggleSetConfirm" aria-label="Show password"><i class="fas fa-eye"></i></button>
       </div>
     </div>
 
@@ -1055,8 +1095,17 @@ input{font-family:inherit}
     </div>
     <div class="step" id="rs3" style="display:none">
       <p style="color:#6b7280;text-align:center;margin-bottom:12px">Enter your new password.</p>
-      <input type="password" id="newPw" placeholder="New password" style="width:100%;padding:12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:10px;background:#f8fafc">
-      <input type="password" id="confirmNewPw" placeholder="Confirm new password" style="width:100%;padding:12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:12px;background:#f8fafc">
+
+      <div class="pw-field" style="margin-bottom:10px">
+        <input type="password" id="newPw" placeholder="New password" autocomplete="new-password">
+        <button type="button" class="pw-toggle" id="toggleNewPw" aria-label="Show password"><i class="fas fa-eye"></i></button>
+      </div>
+
+      <div class="pw-field" style="margin-bottom:12px">
+        <input type="password" id="confirmNewPw" placeholder="Confirm new password" autocomplete="new-password">
+        <button type="button" class="pw-toggle" id="toggleConfirmNewPw" aria-label="Show password"><i class="fas fa-eye"></i></button>
+      </div>
+
       <button class="qv-btn" id="resetPwBtn">Reset Password</button>
       <button class="qv-btn" style="background:#f0f2f5;color:#6b7280;margin-top:8px" onclick="closeForgot()">Cancel</button>
     </div>
@@ -2421,6 +2470,11 @@ function npBindEye(btnId, inputId){
 npBindEye('togglePw','password');
 npBindEye('toggleRp','regPassword');
 npBindEye('toggleCp','confirmPassword');
+npBindEye('toggleSetCur','setPwCurrent');
+npBindEye('toggleSetNew','setPwNew');
+npBindEye('toggleSetConfirm','setPwConfirm');
+npBindEye('toggleNewPw','newPw');
+npBindEye('toggleConfirmNewPw','confirmNewPw');
 
 /* --- Dynamic icon on login field --- */
 (function(){
@@ -2514,9 +2568,8 @@ if(loginFormEl){
         npSafeSet('session_id',    d.session_id || '');
         if(d.token) npSafeSet('jwt_token', d.token);
 
-        const rm = $('rememberMe');
-        if(rm && rm.checked){ npSafeSet('np_remember_id', idVal); }
-        else { npSafeRemove('np_remember_id'); }
+        /* Identity is remembered automatically for a smoother return visit */
+        npSafeSet('np_remember_id', idVal);
 
         if(ok){
           const shown = d.email || d.username || idVal;
@@ -2630,8 +2683,6 @@ if(registerFormEl){
   if(remembered){
     const idI = $('loginEmail');
     if(idI) idI.value = remembered;
-    const rm = $('rememberMe');
-    if(rm) rm.checked = true;
     const icon = $('loginIdIcon');
     if(icon) icon.className = 'fas auth-icon ' + (remembered.includes('@') ? 'fa-envelope' : 'fa-user');
   }
