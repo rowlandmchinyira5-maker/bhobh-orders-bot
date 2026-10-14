@@ -1771,7 +1771,7 @@ function startOrder(key){
   const p=allProducts.find(x=>x.key===key);if(!p)return;
   currentProductKey=key;
   const mc=$('marketplaceContent');if(mc)mc.style.display='none';
-  if(chatBubblesEl){chatBubblesEl.style.display='flex';chatBubblesEl.innerHTML=''}
+  if(chatBubblesEl){chatBubblesEl.style.display='flex'} // Removed innerHTML=''
   addBotMsg(`<div class="product-details">
     <div class="p-name">${esc(p.name)}</div>
     ${p.image?`<img src="${esc(p.image)}" class="product-img">`:''}
@@ -1903,6 +1903,7 @@ async function sendOrder(){
       incrementOrderBadge();
       currentCart=[];waitingForCheckout=false;waitingForQty=false;currentProductKey=null;orderData={};currentOrderStep=0;
       updateCartBadges();
+      // DO NOT clear the chat bubbles here. The message will remain.
     } else addBotMsg('Order failed: '+(d.message||'Unknown error'));
   }catch(e){addBotMsg('Network error: '+e.message)}
 }
