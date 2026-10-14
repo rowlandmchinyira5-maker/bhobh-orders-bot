@@ -22,19 +22,26 @@
     <link rel="apple-touch-icon" sizes="512x512" href="logo.png">
 
     <!-- ============================================================ -->
-    <!-- ADMIN-SPECIFIC MANIFEST (inline data-URI)                    -->
-    <!-- This ensures the admin page installs as "NYPADROX Admin"     -->
-    <!-- as a SEPARATE PWA from the frontend. Do NOT replace this     -->
-    <!-- with href="manifest.json" — that file belongs to the store.  -->
+    <!-- ADMIN-SPECIFIC MANIFEST                                      -->
     <!--                                                              -->
-    <!-- FIX: start_url / scope now resolve to THIS page             -->
-    <!-- (./admin.html) instead of the non-existent /admin route.     -->
-    <!-- Previously scope="/admin" did not contain "/admin.html",     -->
-    <!-- so Chrome refused to apply the manifest -> the page was not  -->
-    <!-- installable -> beforeinstallprompt never fired -> the        -->
-    <!-- Install button never appeared.                               -->
+    <!-- ROOT CAUSE OF THE FAILED INSTALL (now fixed):                -->
+    <!-- The previous version embedded the manifest as a              -->
+    <!--   href="data:application/json;..."                           -->
+    <!-- data: URI. Chrome does NOT resolve relative URLs (such as    -->
+    <!-- the "logo.png" icon srcs) against a data: URL, so the        -->
+    <!-- manifest ended up with ZERO usable icons. No icons -> the    -->
+    <!-- install criteria fail -> the app is not installable ->       -->
+    <!-- `beforeinstallprompt` never fires -> `deferredPrompt` stays  -->
+    <!-- null -> the Install button never appears.                    -->
+    <!--                                                              -->
+    <!-- The manifest is now a REAL FILE (admin-manifest.json) that   -->
+    <!-- sits next to this page, so every relative URL resolves       -->
+    <!-- correctly and Chrome can read the icons.                     -->
+    <!--                                                              -->
+    <!-- NOTE: admin-manifest.json is a SEPARATE file from the        -->
+    <!-- storefront's manifest.json, so the two PWAs stay distinct.   -->
     <!-- ============================================================ -->
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22NYPADROX%20Admin%22%2C%22short_name%22%3A%22NYPADROX%20Admin%22%2C%22description%22%3A%22Admin%20panel%20for%20the%20NYPADROX%20e-commerce%20platform%22%2C%22start_url%22%3A%22.%2Fadmin.html%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22any%22%2C%22background_color%22%3A%22%230d2b3e%22%2C%22theme_color%22%3A%22%23039161%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+    <link rel="manifest" href="admin-manifest.json">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -851,6 +858,8 @@
             }
 
             // ---------- SERVICE WORKER (same code the frontend uses) ----------
+            // NOTE: Chrome only fires `beforeinstallprompt` when a service
+            // worker with a `fetch` handler is registered and active.
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('sw.js', { scope: './' })
@@ -886,7 +895,7 @@
             );
 
             // ================================================================
-            // INSTALL BUTTON — exact logic from frontend index.html
+            // INSTALL BUTTON
             // ================================================================
             let deferredPrompt = null;
             const installBtn = document.getElementById('installBtn');
@@ -910,15 +919,16 @@
             const isSafari = () =>
                 /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent || '');
 
+            // The button is now ALWAYS shown (unless already installed).
+            // If `beforeinstallprompt` is available we use the native prompt;
+            // otherwise the click handler falls back to manual instructions.
             function refreshInstall() {
                 const b = installBtn;
                 if (!b) return;
                 if (isStandalone()) { b.style.display = 'none'; return; }
-                if (deferredPrompt) { b.style.display = 'inline-flex'; return; }
-                if (isIOS()) { b.style.display = 'inline-flex'; return; }
-                if (isSafari() && /Mac/.test(navigator.platform)) { b.style.display = 'inline-flex'; return; }
-                b.style.display = 'none';
+                b.style.display = 'inline-flex';
             }
+
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
