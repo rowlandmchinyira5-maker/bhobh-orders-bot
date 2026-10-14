@@ -503,12 +503,42 @@ input{font-family:inherit}
             flex-shrink:0;box-shadow:0 -2px 10px rgba(0,0,0,.03); width: 100%;}
 .chat-input-icon{width:42px;height:42px;min-width:42px;border-radius:50%;border:none;background:#f0f2f5;
                  color:var(--brand-blue);font-size:16px;display:flex;align-items:center;justify-content:center;
-                 transition:all .2s}
+                 transition:all .2s; position:relative; overflow:visible;}
 .chat-input-icon:hover{background:#e2e8f0}
 .chat-input-icon:active{transform:scale(.94)}
 .chat-input-icon.recording{background:#ff3b30;color:#fff;animation:pulseRec 1.2s infinite}
 @keyframes pulseRec{0%,100%{box-shadow:0 0 0 0 rgba(255,59,48,.6)}50%{box-shadow:0 0 0 8px rgba(255,59,48,0)}}
 .chat-input-icon.speaker-on{background:var(--brand-blue);color:#fff}
+
+/* ---- DeepSeek-style speaking animation ---- */
+.chat-input-icon.speaker-speaking{
+  background:linear-gradient(135deg,#035191,#0277bd) !important;
+  color:#fff !important;
+  animation:speakerPulse 1.4s infinite ease-in-out;
+}
+.chat-input-icon.speaker-speaking::before,
+.chat-input-icon.speaker-speaking::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid rgba(3,81,145,.65);
+  pointer-events:none;
+  animation:speakerRipple 1.8s infinite ease-out;
+}
+.chat-input-icon.speaker-speaking::after{
+  animation-delay:.9s;
+}
+@keyframes speakerPulse{
+  0%,100%{ box-shadow:0 0 0 0 rgba(3,81,145,.45); transform:scale(1); }
+  50%    { box-shadow:0 0 0 8px rgba(3,81,145,0); transform:scale(1.05); }
+}
+@keyframes speakerRipple{
+  0%   { transform:scale(1);   opacity:.9; }
+  70%  { transform:scale(1.9); opacity:0;  }
+  100% { transform:scale(1.9); opacity:0;  }
+}
+
 .chat-input-field{flex:1;min-width:0;padding:11px 16px;border:1.5px solid var(--line);border-radius:24px;
                   background:#f8fafc;font-size:15px;color:var(--text);outline:none;transition:all .2s}
 .chat-input-field:focus{border-color:var(--brand-blue);background:#ffffff;box-shadow:0 0 0 3px rgba(3,81,145,.08)}
@@ -1312,6 +1342,106 @@ const carouselTrackEl=$('carouselTrack');
 const toastContainer=$('toasts');
 
 /* ============================================================
+   NATURAL VOICE ENGINE (DeepSeek-like)
+   ============================================================ */
+let _cachedVoice = null;
+let _speakingCount = 0;
+
+function _pickBestVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = speechSynthesis.getVoices() || [];
+  if (!voices.length) return null;
+
+  // Order matters — highest-quality natural voices first
+  const preferred = [
+    /Microsoft Aria Online.*Natural/i,
+    /Microsoft Jenny Online.*Natural/i,
+    /Microsoft Guy Online.*Natural/i,
+    /Microsoft Davis Online.*Natural/i,
+    /Microsoft Michelle Online.*Natural/i,
+    /Microsoft Sonia Online.*Natural/i,
+    /Microsoft Clara Online.*Natural/i,
+    /Google UK English Female/i,
+    /Google UK English Male/i,
+    /Google US English/i,
+    /Samantha/i,
+    /Karen/i,
+    /Moira/i,
+    /Tessa/i,
+    /Serena/i,
+    /Daniel/i,
+    /Alex/i,
+    /Microsoft Zira/i,
+    /Microsoft David/i,
+    /Microsoft Mark/i,
+  ];
+  for (const rx of preferred) {
+    const v = voices.find(v => rx.test(v.name));
+    if (v) return v;
+  }
+  // Fall back to first English voice
+  const en = voices.find(v => /^en[-_]?/i.test(v.lang));
+  return en || voices[0];
+}
+
+function _getBestVoice() {
+  if (_cachedVoice) return _cachedVoice;
+  _cachedVoice = _pickBestVoice();
+  return _cachedVoice;
+}
+
+function _setSpeaking(on) {
+  const b = $('speakerBtn');
+  if (!b) return;
+  if (on) {
+    b.classList.add('speaker-speaking');
+    b.classList.remove('speaker-on');
+    b.innerHTML = '<i class="fas fa-volume-up"></i>';
+  } else {
+    b.classList.remove('speaker-speaking');
+    if (speakerOn) b.classList.add('speaker-on');
+    b.innerHTML = speakerOn
+      ? '<i class="fas fa-volume-up"></i>'
+      : '<i class="fas fa-volume-mute"></i>';
+  }
+}
+
+function _speakUtterance(text) {
+  if (!('speechSynthesis' in window) || !text) return;
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    const v = _getBestVoice();
+    if (v) u.voice = v;
+    u.rate = 0.98;
+    u.pitch = 1.0;
+    u.volume = 1.0;
+    u.lang = (v && v.lang) || 'en-US';
+
+    _speakingCount++;
+    _setSpeaking(true);
+
+    const done = () => {
+      _speakingCount = Math.max(0, _speakingCount - 1);
+      if (_speakingCount === 0) _setSpeaking(false);
+    };
+    u.onend = done;
+    u.onerror = done;
+
+    speechSynthesis.speak(u);
+  } catch(e) { /* ignore */ }
+}
+
+if ('speechSynthesis' in window) {
+  try {
+    speechSynthesis.onvoiceschanged = () => {
+      _cachedVoice = null;
+      _getBestVoice();
+    };
+    _getBestVoice();
+  } catch(e){}
+}
+
+/* ============================================================
    PHONE BACK-BUTTON HANDLING
    ============================================================ */
 const npScreens=[];
@@ -1437,6 +1567,8 @@ function typeBotMessage(text,onDone){
 
   if(speakerOn && 'speechSynthesis' in window){
     try{ speechSynthesis.cancel(); }catch(e){}
+    _speakingCount = 0;
+    _setSpeaking(false);
   }
 
   function render(){
@@ -1464,11 +1596,7 @@ function typeBotMessage(text,onDone){
     spokenUpTo += cut;
     if(!phrase) return;
 
-    try{
-      const u = new SpeechSynthesisUtterance(phrase);
-      u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0; u.lang = 'en-US';
-      speechSynthesis.speak(u);
-    }catch(e){}
+    _speakUtterance(phrase);
   }
 
   function tick(){
@@ -1479,14 +1607,8 @@ function typeBotMessage(text,onDone){
       setTimeout(tick, 22);
     } else {
       if(speakerOn && 'speechSynthesis' in window && spokenUpTo < raw.length){
-        try{
-          const tail = raw.slice(spokenUpTo).replace(/\*/g,'').replace(/\s+/g,' ').trim();
-          if(tail){
-            const u = new SpeechSynthesisUtterance(tail);
-            u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0; u.lang = 'en-US';
-            speechSynthesis.speak(u);
-          }
-        }catch(e){}
+        const tail = raw.slice(spokenUpTo).replace(/\*/g,'').replace(/\s+/g,' ').trim();
+        if(tail) _speakUtterance(tail);
       }
       let html = esc(raw).replace(/\n/g,'<br>').replace(/\*([^*]+)\*/g,'<strong>$1</strong>');
       b.innerHTML = html + '<div class="timestamp"></div>';
@@ -1771,7 +1893,7 @@ function startOrder(key){
   const p=allProducts.find(x=>x.key===key);if(!p)return;
   currentProductKey=key;
   const mc=$('marketplaceContent');if(mc)mc.style.display='none';
-  if(chatBubblesEl){chatBubblesEl.style.display='flex'} // Removed innerHTML=''
+  if(chatBubblesEl){chatBubblesEl.style.display='flex'}
   addBotMsg(`<div class="product-details">
     <div class="p-name">${esc(p.name)}</div>
     ${p.image?`<img src="${esc(p.image)}" class="product-img">`:''}
@@ -1903,7 +2025,6 @@ async function sendOrder(){
       incrementOrderBadge();
       currentCart=[];waitingForCheckout=false;waitingForQty=false;currentProductKey=null;orderData={};currentOrderStep=0;
       updateCartBadges();
-      // DO NOT clear the chat bubbles here. The message will remain.
     } else addBotMsg('Order failed: '+(d.message||'Unknown error'));
   }catch(e){addBotMsg('Network error: '+e.message)}
 }
@@ -2247,17 +2368,23 @@ function startMic(){
 }
 function speakText(t){
   if(!('speechSynthesis' in window)||!t)return;
-  try{speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(t);
-    u.rate=1.0;u.pitch=1.0;u.volume=1.0;u.lang='en-US';
-    speechSynthesis.speak(u);
-  }catch(e){}
+  try{ speechSynthesis.cancel(); }catch(e){}
+  _speakingCount = 0;
+  _setSpeaking(false);
+  _speakUtterance(t);
 }
 function toggleSpeaker(){
   speakerOn=!speakerOn;
   const b=$('speakerBtn');
-  if(speakerOn){if(b){b.classList.add('speaker-on');b.innerHTML='<i class="fas fa-volume-up"></i>'}homeToast('Speaker ON')}
-  else{if(b){b.classList.remove('speaker-on');b.innerHTML='<i class="fas fa-volume-mute"></i>'}try{speechSynthesis.cancel()}catch(e){};homeToast('Speaker OFF')}
+  if(speakerOn){
+    if(b){b.classList.add('speaker-on');b.innerHTML='<i class="fas fa-volume-up"></i>'}
+    homeToast('Speaker ON');
+  } else {
+    if(b){b.classList.remove('speaker-on');b.classList.remove('speaker-speaking');b.innerHTML='<i class="fas fa-volume-mute"></i>'}
+    try{ speechSynthesis.cancel(); }catch(e){}
+    _speakingCount = 0;
+    homeToast('Speaker OFF');
+  }
 }
 
 /* ============================================================
@@ -2569,7 +2696,6 @@ if(loginFormEl){
         npSafeSet('session_id',    d.session_id || '');
         if(d.token) npSafeSet('jwt_token', d.token);
 
-        /* Identity is remembered automatically for a smoother return visit */
         npSafeSet('np_remember_id', idVal);
 
         if(ok){
@@ -2957,6 +3083,9 @@ document.addEventListener('visibilitychange', () => {
 function logout(){
   if(eventSource){try{eventSource.close()}catch(e){};eventSource=null}
   stopVideoPolling();
+  try{ speechSynthesis.cancel(); }catch(e){}
+  _speakingCount = 0;
+  _setSpeaking(false);
   npSafeRemove('loggedInUser');
   npSafeRemove('loggedInEmail');
   npSafeRemove('session_id');
@@ -3043,6 +3172,9 @@ if('serviceWorker' in navigator){
 window.onload=()=>{
   setTimeout(()=>{const s=$('splash');if(s)s.style.display='none'},1400);
   try{setupRec()}catch(e){}
+
+  // Warm up natural voice engine
+  try { _getBestVoice(); } catch(e){}
 
   try{
     const user=npSafeGet('loggedInUser');
