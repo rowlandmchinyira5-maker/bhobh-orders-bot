@@ -16,21 +16,24 @@
     <meta name="application-name" content="NYPADROX Admin">
 
     <!-- Favicons (extracted from index.html — NyPadrox logo) -->
-    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/57yg1jO.jpg">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/57yg1jO.jpg">
-    <link rel="apple-touch-icon" sizes="192x192" href="https://i.imgur.com/57yg1jO.jpg">
-    <link rel="apple-touch-icon" sizes="512x512" href="https://i.imgur.com/57yg1jO.jpg">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="logo.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="logo.png">
 
-    <!-- Inline manifest (URL-encoded JSON) — uses NyPadrox logo, distinct start_url for admin -->
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22NYPADROX%20Admin%22%2C%22short_name%22%3A%22NYPADROX%20Admin%22%2C%22description%22%3A%22Admin%20panel%20for%20NYPADROX%20e-commerce%20platform%22%2C%22start_url%22%3A%22.%22%2C%22scope%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230d2b3e%22%2C%22theme_color%22%3A%22%23039161%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fi.imgur.com%2F57yg1jO.jpg%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fi.imgur.com%2F57yg1jO.jpg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+    <!-- Manifest — same source the frontend uses (served by backend at /manifest.json) -->
+    <link rel="manifest" href="manifest.json">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Font Awesome — same version the frontend uses for the install button icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
     <style>
+        :root { --safe-bottom: env(safe-area-inset-bottom, 0px); }
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
         body { background: #f4f7fc; }
 
@@ -39,7 +42,9 @@
         .sidebar .nav-link { color: #cbd5e0; border-radius: 0.5rem; margin-bottom: 0.2rem; transition: 0.2s; }
         .sidebar .nav-link:hover, .sidebar .nav-link.active { background: #1a4057; color: #fff; }
         .sidebar .nav-link i { width: 1.5rem; }
-        .sidebar-brand { font-weight: 700; font-size: 1.4rem; padding: 0 1rem 1.5rem; color: #fff; border-bottom: 1px solid #1a4057; }
+        .sidebar-brand { font-weight: 700; font-size: 1.4rem; padding: 0 1rem 1.5rem; color: #fff; border-bottom: 1px solid #1a4057; display: flex; align-items: center; gap: .6rem; }
+        .sidebar-brand .brand-logo { width: 36px; height: 36px; border-radius: 10px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .sidebar-brand .brand-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .sidebar-brand small { font-weight: 400; font-size: 0.8rem; color: #94a3b8; display: block; letter-spacing: 1px; text-transform: uppercase; }
         .main-content { padding: 1.5rem; }
 
@@ -62,31 +67,30 @@
         .loading-spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid #e9ecef; border-top: 2px solid #039161; border-radius: 50%; animation: spin 0.7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ========== PWA (extracted from index.html — floating pill button) ========== */
-        #installBtn {
-            position: fixed;
-            bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
-            right: 14px;
-            height: 42px;
-            padding: 0 18px;
-            border-radius: 21px;
-            background: linear-gradient(135deg, #035191, #0277bd);
-            color: #fff;
-            border: none;
-            box-shadow: 0 4px 14px rgba(0,0,0,.28);
-            font-size: 13px;
-            font-weight: 600;
-            z-index: 9998;
-            display: none;
-            align-items: center;
-            gap: 7px;
-            white-space: nowrap;
+        /* ========== PWA (exact copy from index.html) ========== */
+        #installBtn{
+            position:fixed;
+            bottom:calc(72px + var(--safe-bottom));
+            right:14px;
+            padding:10px 16px;
+            height:42px;
+            border-radius:21px;
+            background:linear-gradient(135deg,#035191,#0277bd);
+            color:#fff;
+            border:none;
+            box-shadow:0 4px 14px rgba(0,0,0,.28);
+            font-size:13px;
+            font-weight:600;
+            z-index:1000;
+            display:none;
+            align-items:center;
+            gap:7px;
+            white-space:nowrap;
+            cursor:pointer;
             transition: transform .2s, box-shadow .2s;
-            cursor: pointer;
         }
         #installBtn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(3,81,145,.38); }
         #installBtn:active { transform: translateY(0); }
-        #installBtn.visible { display: inline-flex; }
 
         #pwaSplash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -189,7 +193,6 @@
             position: relative;
             z-index: 1;
         }
-        /* Logo mark now hosts the NyPadrox image */
         .login-brand .brand-mark .mark {
             width: 46px; height: 46px;
             border-radius: 12px;
@@ -476,33 +479,36 @@
         .conv-user-cell .conv-name { font-weight: 600; color: #0d2b3e; }
         .conv-user-cell .conv-handle { font-size: .75rem; color: #64748b; }
         .conv-user-cell.guest .conv-name { font-style: italic; color: #64748b; font-weight: 500; }
+
+        /* ========== BACKUP CARD ========== */
+        .backup-card { border-left: 4px solid #039161; }
     </style>
 </head>
 <body>
 
-    <!-- PWA SPLASH (now with NyPadrox logo) -->
+    <!-- PWA SPLASH (uses NyPadrox logo.png, same as frontend) -->
     <div id="pwaSplash">
         <div class="inner">
-            <img class="splash-logo" src="https://i.imgur.com/57yg1jO.jpg" alt="NYPADROX">
+            <img class="splash-logo" src="logo.png" alt="NYPADROX">
             <div class="loader"></div>
             <span class="splash-word">NYPADROX</span>
         </div>
     </div>
 
-    <!-- INSTALL BUTTON (extracted from index.html — floating pill) -->
+    <!-- INSTALL BUTTON (exact markup from frontend index.html) -->
     <button id="installBtn" aria-label="Install app">
-        <i class="bi bi-download"></i><span>Install App</span>
+        <i class="fas fa-download"></i><span>Install App</span>
     </button>
 
     <!-- ===================== LOGIN OVERLAY ===================== -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-shell">
 
-            <!-- LEFT: branding (logo mark now uses NyPadrox image) -->
+            <!-- LEFT: branding -->
             <aside class="login-brand">
                 <div class="brand-mark">
                     <div class="mark">
-                        <img src="https://i.imgur.com/57yg1jO.jpg" alt="NYPADROX">
+                        <img src="logo.png" alt="NYPADROX">
                     </div>
                     <div class="text">
                         NYPADROX
@@ -520,6 +526,7 @@
                         <li><i class="bi bi-shield-lock"></i> Enterprise-grade session security</li>
                         <li><i class="bi bi-graph-up-arrow"></i> Live order &amp; stock telemetry</li>
                         <li><i class="bi bi-people"></i> Full user &amp; permissions control</li>
+                        <li><i class="bi bi-cloud-arrow-down"></i> Automatic user backup &amp; restore</li>
                     </ul>
                 </div>
 
@@ -528,7 +535,7 @@
                 </div>
             </aside>
 
-            <!-- RIGHT: form (unchanged) -->
+            <!-- RIGHT: form -->
             <main class="login-form-pane">
                 <h2>Welcome back</h2>
                 <p class="subtitle">Sign in to your administrator account to continue.</p>
@@ -540,10 +547,10 @@
 
                 <form id="loginForm" autocomplete="on" novalidate>
                     <div class="field-group">
-                        <label for="loginUsername">Username</label>
+                        <label for="loginUsername">Username or Email</label>
                         <div class="input-wrap">
                             <input type="text" id="loginUsername" name="username"
-                                placeholder="Enter your username"
+                                placeholder="Enter your username or email"
                                 autocomplete="username" autocapitalize="none"
                                 spellcheck="false" required>
                             <i class="bi bi-person field-icon"></i>
@@ -586,7 +593,7 @@
                     </div>
 
                     <div class="login-footer">
-                        NYPADROX Admin <span class="dot">·</span> v8.0.0
+                        NYPADROX Admin <span class="dot">·</span> v8.2.0
                         <span class="dot">·</span> Build 2025.10
                     </div>
                 </form>
@@ -595,12 +602,15 @@
         </div>
     </div>
 
-    <!-- ===================== MAIN APP (unchanged) ===================== -->
+    <!-- ===================== MAIN APP ===================== -->
     <div id="app" style="display:none;">
         <div class="container-fluid">
             <div class="row">
                 <nav class="col-md-2 col-12 sidebar p-3">
-                    <div class="sidebar-brand">NYPADROX <small>Admin Panel</small></div>
+                    <div class="sidebar-brand">
+                        <div class="brand-logo"><img src="logo.png" alt="NYPADROX"></div>
+                        <div>NYPADROX <small>Admin Panel</small></div>
+                    </div>
                     <ul class="nav nav-pills flex-column flex-nowrap" id="sidebarNav">
                         <li class="nav-item"><a class="nav-link active" data-section="dashboard" href="#"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" data-section="orders" href="#"><i class="bi bi-box-seam"></i> Orders</a></li>
@@ -621,7 +631,7 @@
         </div>
     </div>
 
-    <!-- ===================== PRODUCT MODAL (unchanged) ===================== -->
+    <!-- ===================== PRODUCT MODAL ===================== -->
     <div class="modal fade" id="productModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
@@ -755,7 +765,7 @@
         </div>
     </div>
 
-    <!-- ===================== VIDEO MODAL (unchanged) ===================== -->
+    <!-- ===================== VIDEO MODAL ===================== -->
     <div class="modal fade" id="videoModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
@@ -830,89 +840,13 @@
                 setTimeout(() => { if (splash) splash.style.display = 'none'; }, 1200);
             }
 
-            // ---------- SERVICE WORKER (extracted from index.html) ----------
+            // ---------- SERVICE WORKER (exact code from frontend index.html) ----------
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('sw.js', { scope: './' })
                         .then(reg => { try { reg.update(); } catch (_) {} })
                         .catch(err => { console.warn('Service worker registration failed:', err); });
                 });
-            }
-
-            // ---------- INSTALL BUTTON (extracted from index.html) ----------
-            // Detects: Android/Chrome (via beforeinstallprompt), iOS Safari,
-            // macOS Safari 17+, and falls back to manual instructions.
-            let deferredPrompt = null;
-            const installBtn = document.getElementById('installBtn');
-
-            const isStandalone = () => {
-                try {
-                    return (
-                        window.matchMedia('(display-mode: standalone)').matches ||
-                        window.matchMedia('(display-mode: fullscreen)').matches ||
-                        window.matchMedia('(display-mode: minimal-ui)').matches ||
-                        window.navigator.standalone === true
-                    );
-                } catch (_) { return false; }
-            };
-            const isIOS = () => {
-                const ua = navigator.userAgent || '';
-                const iOS = /iPad|iPhone|iPod/.test(ua) ||
-                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-                return iOS && !window.MSStream;
-            };
-            const isSafari = () =>
-                /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent || '');
-
-            function refreshInstall() {
-                if (!installBtn) return;
-                if (isStandalone()) { installBtn.classList.remove('visible'); return; }
-                if (deferredPrompt) { installBtn.classList.add('visible'); return; }
-                if (isIOS()) { installBtn.classList.add('visible'); return; }
-                if (isSafari() && /Mac/.test(navigator.platform)) {
-                    installBtn.classList.add('visible'); return;
-                }
-                installBtn.classList.remove('visible');
-            }
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                refreshInstall();
-            });
-
-            window.addEventListener('appinstalled', () => {
-                deferredPrompt = null;
-                if (installBtn) installBtn.classList.remove('visible');
-                showToast('NYPADROX Admin installed successfully!', 'success');
-            });
-
-            if (installBtn) {
-                installBtn.addEventListener('click', async () => {
-                    if (deferredPrompt) {
-                        try {
-                            deferredPrompt.prompt();
-                            const choice = await deferredPrompt.userChoice;
-                            if (choice && choice.outcome === 'accepted') {
-                                installBtn.classList.remove('visible');
-                                showToast('App installed! 🎉', 'success');
-                            }
-                        } catch (_) {}
-                        deferredPrompt = null;
-                        refreshInstall();
-                        return;
-                    }
-                    if (isIOS()) {
-                        alert('Install NYPADROX Admin on iPhone / iPad:\n\n1. Tap the Share button (the square with an up-arrow) in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top-right corner\n\nThe NYPADROX Admin icon will then appear on your home screen.');
-                        return;
-                    }
-                    if (isSafari() && /Mac/.test(navigator.platform)) {
-                        alert('Install NYPADROX Admin on macOS Safari:\n\nFile menu → "Add to Dock…"\n\n(If you don\'t see it, update Safari to version 17 or later.)');
-                        return;
-                    }
-                    alert('Install NYPADROX Admin:\n\n• Chrome / Edge: open the browser menu (⋮) → "Install NYPADROX Admin" or "Install app"\n• Firefox (Android): menu → "Install"\n• Samsung Internet: menu → "Add page to" → "Home screen"');
-                });
-                refreshInstall();
             }
 
             // ---------- GLOBALS ----------
@@ -940,6 +874,78 @@
                 "<path d='M58 128 L88 104 L118 128 L142 116 L142 142 L58 142 Z'/>" +
                 "</g></svg>"
             );
+
+            // ================================================================
+            // INSTALL BUTTON — exact logic from frontend index.html
+            // ================================================================
+            let deferredPrompt = null;
+            const installBtn = document.getElementById('installBtn');
+
+            const isStandalone = () => {
+                try {
+                    return (
+                        window.matchMedia('(display-mode: standalone)').matches ||
+                        window.matchMedia('(display-mode: fullscreen)').matches ||
+                        window.matchMedia('(display-mode: minimal-ui)').matches ||
+                        navigator.standalone === true
+                    );
+                } catch (_) { return false; }
+            };
+            const isIOS = () => {
+                const ua = navigator.userAgent || '';
+                const iOS = /iPad|iPhone|iPod/.test(ua) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                return iOS && !window.MSStream;
+            };
+            const isSafari = () =>
+                /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent || '');
+
+            function refreshInstall() {
+                const b = installBtn;
+                if (!b) return;
+                if (isStandalone()) { b.style.display = 'none'; return; }
+                if (deferredPrompt) { b.style.display = 'inline-flex'; return; }
+                if (isIOS()) { b.style.display = 'inline-flex'; return; }
+                if (isSafari() && /Mac/.test(navigator.platform)) { b.style.display = 'inline-flex'; return; }
+                b.style.display = 'none';
+            }
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                refreshInstall();
+            });
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                if (installBtn) installBtn.style.display = 'none';
+                showToast('NyPadrox Admin installed on your device', 'success');
+            });
+            if (installBtn) {
+                installBtn.onclick = async () => {
+                    if (deferredPrompt) {
+                        try {
+                            deferredPrompt.prompt();
+                            const choice = await deferredPrompt.userChoice;
+                            if (choice && choice.outcome === 'accepted') {
+                                installBtn.style.display = 'none';
+                                showToast('NYPADROX Admin is being installed', 'success');
+                            }
+                        } catch (_) {}
+                        deferredPrompt = null;
+                        refreshInstall();
+                        return;
+                    }
+                    if (isIOS()) {
+                        alert('Install NyPadrox on iPhone / iPad:\n\n1. Tap the Share button in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top-right corner\n\nThe NyPadrox icon will then appear on your home screen.');
+                        return;
+                    }
+                    if (isSafari() && /Mac/.test(navigator.platform)) {
+                        alert('Install NyPadrox on macOS Safari:\n\nFile menu > "Add to Dock..."\n\nIf you do not see it, update Safari to version 17 or later.');
+                        return;
+                    }
+                    alert('Install NyPadrox:\n\n- Chrome / Edge: open the browser menu then "Install NyPadrox" or "Install app"\n- Firefox (Android): menu > "Install"\n- Samsung Internet: menu > "Add page to" > "Home screen"');
+                };
+                refreshInstall();
+            }
 
             // ---------- HELPERS ----------
             function escapeHtml(value) {
@@ -1100,17 +1106,25 @@
                 e.preventDefault();
                 if (signInBtn.disabled) return;
                 clearLoginError();
-                const username = loginUsername.value.trim();
+                const identifier = loginUsername.value.trim();
                 const password = loginPassword.value;
-                if (!username) { showLoginError('Please enter your username.'); loginUsername.focus(); return; }
+                if (!identifier) { showLoginError('Please enter your username or email.'); loginUsername.focus(); return; }
                 if (!password) { showLoginError('Please enter your password.'); loginPassword.focus(); return; }
 
                 setLoading(true);
                 try {
+                    // Backend accepts `identifier`, `email`, or `username`.
+                    const isEmail = identifier.includes('@');
+                    const body = {
+                        identifier,
+                        email: isEmail ? identifier : '',
+                        username: isEmail ? '' : identifier,
+                        password
+                    };
                     const res = await fetchWithTimeout(`${API_BASE}/api/login`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username, password })
+                        body: JSON.stringify(body)
                     }, API_TIMEOUT);
 
                     let data;
@@ -1139,7 +1153,7 @@
                     }));
 
                     try {
-                        if (rememberMe.checked) localStorage.setItem('adminUsername', username);
+                        if (rememberMe.checked) localStorage.setItem('adminUsername', data.username || identifier);
                         else localStorage.removeItem('adminUsername');
                     } catch (_) {}
 
@@ -1252,14 +1266,41 @@
                 }
             }
 
+            // ============================================================
+            // RESTORE USERS FROM BACKUP  (new feature)
+            // ============================================================
+            async function restoreUsersFromBackup() {
+                if (!confirm(
+                    'Restore users from the local backup file into the database?\n\n' +
+                    'This is safe to run multiple times — existing users are skipped.\n' +
+                    'Use this after the DATABASE_URL has been renewed or replaced.'
+                )) return;
+
+                try {
+                    const res = await apiRequest('/api/admin/restore-users', { method: 'POST' });
+                    if (res.success) {
+                        const msg = `Restored: ${res.restored || 0} · Skipped: ${res.skipped || 0} · Total in backup: ${res.total_in_backup || 0}`;
+                        showToast(msg, 'success');
+                    } else {
+                        showToast(res.message || 'Restore failed', 'danger');
+                    }
+                    return res;
+                } catch (err) {
+                    showToast('Network error while restoring users', 'danger');
+                    return { success: false };
+                }
+            }
+            window.restoreUsersFromBackup = restoreUsersFromBackup;
+
             // ---------- DASHBOARD ----------
             async function loadDashboard(container) {
                 try {
-                    const [usersRes, ordersRes, productsRes, videosRes] = await Promise.all([
+                    const [usersRes, ordersRes, productsRes, videosRes, healthRes] = await Promise.all([
                         apiRequest('/api/admin/users?limit=200'),
                         apiRequest('/api/orders'),
                         apiRequest('/api/products'),
-                        apiRequest('/api/videos')
+                        apiRequest('/api/videos'),
+                        apiRequest('/api/health')
                     ]);
                     if (logoutInProgress) return;
                     const userCount = usersRes.users ? usersRes.users.length : 0;
@@ -1268,6 +1309,12 @@
                     const videoCount = videosRes.videos ? videosRes.videos.length : 0;
                     const recent = ordersRes.orders ? ordersRes.orders.slice(0, 5) : [];
 
+                    const health = healthRes || {};
+                    const backupCount = health.users_backup_count ?? 0;
+                    const backupFile = health.users_backup_file || 'users_backup.json';
+                    const dbOk = health.db_write_pool === true;
+                    const backupWarn = backupCount > 0;
+
                     container.innerHTML = `
                         <div class="row g-4">
                             <div class="col-lg-3 col-6"><div class="card stat-card p-3"><i class="bi bi-box-seam stat-icon float-end"></i><div class="stat-value">${orderCount}</div><div class="text-secondary">Orders</div></div></div>
@@ -1275,10 +1322,44 @@
                             <div class="col-lg-3 col-6"><div class="card stat-card p-3"><i class="bi bi-grid stat-icon float-end"></i><div class="stat-value">${productCount}</div><div class="text-secondary">Products</div></div></div>
                             <div class="col-lg-3 col-6"><div class="card stat-card p-3"><i class="bi bi-play-btn stat-icon float-end"></i><div class="stat-value">${videoCount}</div><div class="text-secondary">Videos</div></div></div>
                         </div>
+
+                        <div class="card mt-4 p-3 backup-card">
+                            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                                <div>
+                                    <h5 class="mb-1"><i class="bi bi-shield-check text-success"></i> Users Backup</h5>
+                                    <p class="text-secondary mb-1 small">
+                                        Every registration, password change, and Google signup is mirrored to a local JSON file.
+                                        If the database connection ever drops, users can still log in and can be restored here.
+                                    </p>
+                                    <div class="small">
+                                        <span class="badge ${dbOk ? 'bg-success' : 'bg-danger'} me-2">
+                                            <i class="bi ${dbOk ? 'bi-hdd-network' : 'bi-exclamation-triangle'}"></i>
+                                            DB ${dbOk ? 'connected' : 'unavailable'}
+                                        </span>
+                                        <span class="badge ${backupWarn ? 'bg-primary' : 'bg-secondary'}">
+                                            <i class="bi bi-archive"></i>
+                                            ${backupCount} user${backupCount === 1 ? '' : 's'} in backup
+                                        </span>
+                                        <span class="ms-2 text-secondary">File: <code>${escapeHtml(backupFile)}</code></span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-primary" id="dashboardRestoreBtn">
+                                    <i class="bi bi-cloud-arrow-down"></i> Restore from Backup
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="card mt-4 p-3">
                             <h5 class="mb-3"><i class="bi bi-clock-history"></i> Recent Orders</h5>
                             ${recent.length ? `<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Order</th><th>Product</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>${recent.map(o => `<tr><td>#${escapeHtml(o.id)}</td><td>${escapeHtml(o.product_name)}</td><td>MK ${toLocaleNumber(o.total_mwk)}</td><td><span class="badge bg-${o.status === 'pending' ? 'warning' : o.status === 'delivered' ? 'success' : 'secondary'}">${escapeHtml(o.status)}</span></td><td>${new Date(o.order_date).toLocaleDateString()}</td></tr>`).join('')}</tbody></table></div>` : '<p class="text-secondary">No orders yet.</p>'}
                         </div>`;
+
+                    document.getElementById('dashboardRestoreBtn')?.addEventListener('click', async (e) => {
+                        const btn = e.currentTarget;
+                        btn.disabled = true;
+                        await restoreUsersFromBackup();
+                        loadDashboard(container);
+                    });
                 } catch (err) {
                     container.innerHTML = `<div class="alert alert-danger">Error loading dashboard: ${escapeHtml(err.message)}</div>`;
                 }
@@ -1443,11 +1524,39 @@
             // ---------- USERS ----------
             async function loadUsers(container) {
                 try {
-                    const data = await apiRequest('/api/admin/users?limit=200');
+                    const [data, healthRes] = await Promise.all([
+                        apiRequest('/api/admin/users?limit=200'),
+                        apiRequest('/api/health')
+                    ]);
                     if (logoutInProgress) return;
                     const users = data.users || [];
+                    const health = healthRes || {};
+                    const backupCount = health.users_backup_count ?? 0;
+                    const backupFile = health.users_backup_file || 'users_backup.json';
+                    const fromBackup = data.source === 'backup';
+
                     container.innerHTML = `
-                        <h4><i class="bi bi-people"></i> Users <span class="text-secondary fw-normal">(${data.total || users.length})</span></h4>
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <h4 class="mb-0"><i class="bi bi-people"></i> Users <span class="text-secondary fw-normal">(${data.total || users.length})</span>
+                                ${fromBackup ? '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-exclamation-triangle"></i> Showing backup data</span>' : ''}
+                            </h4>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge bg-primary align-self-center">
+                                    <i class="bi bi-archive"></i> ${backupCount} in backup
+                                </span>
+                                <button class="btn btn-sm btn-outline-primary" id="refreshUsersBtn"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                                <button class="btn btn-sm btn-primary" id="restoreUsersBtn">
+                                    <i class="bi bi-cloud-arrow-down"></i> Restore from Backup
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info small">
+                            <i class="bi bi-info-circle"></i>
+                            Users are automatically backed up to <code>${escapeHtml(backupFile)}</code> on this server.
+                            If the database connection ever drops, use <strong>Restore from Backup</strong> to re-insert any missing accounts.
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead><tr><th>Username</th><th>Email</th><th>Full Name</th><th>Admin</th><th>Active</th><th>Verified</th><th>ID</th></tr></thead>
@@ -1465,6 +1574,15 @@
                                 </tbody>
                             </table>
                         </div>`;
+
+                    document.getElementById('refreshUsersBtn')?.addEventListener('click', () => loadUsers(container));
+                    document.getElementById('restoreUsersBtn')?.addEventListener('click', async (e) => {
+                        const btn = e.currentTarget;
+                        btn.disabled = true;
+                        await restoreUsersFromBackup();
+                        loadUsers(container);
+                    });
+
                     document.querySelectorAll('.user-toggle').forEach(cb => {
                         cb.addEventListener('change', async (e) => {
                             const el = e.target;
@@ -2111,13 +2229,13 @@
                 }
             }
 
-            // ---------- SSE (with jitter + debounced reloads) ----------
+            // ---------- SSE ----------
             function scheduleReloadFromSSE() {
                 if (sseReloadTimer) clearTimeout(sseReloadTimer);
                 sseReloadTimer = setTimeout(() => {
                     sseReloadTimer = null;
                     if (logoutInProgress) return;
-                    if (['orders','videos','dashboard','products','conversations'].includes(currentSection)) {
+                    if (['orders','videos','dashboard','products','conversations','users'].includes(currentSection)) {
                         loadSection(currentSection);
                     }
                 }, SSE_RELOAD_DEBOUNCE);
@@ -2191,6 +2309,9 @@
 
             window.openProductModal = openProductModal;
             window.openVideoModal = openVideoModal;
+
+            // Refresh install button visibility on load (matches frontend behavior)
+            refreshInstall();
 
         })();
     </script>
